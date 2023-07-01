@@ -1,11 +1,15 @@
 package views;
 
+import controllers.ClienteController;
 import models.Cliente;
 import util.HandleDates;
 
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Timestamp;
+import java.util.List;
+
+import static views.FuncionarioView.adicionarFuncionario;
 
 public class ClienteView {
 
@@ -13,12 +17,21 @@ public class ClienteView {
 
     }
 
-    public static void operacaoCliente(int opcao) {
+    public static void operacaoCliente(int opcao, ClienteController controller) {
+        Cliente cliente = null;
+        List<Cliente> clientes = null;
+        int id = 0;
 
         switch (opcao) {
             case 1:
                 // Adicionar Cliente
-                adicionarCliente();
+                cliente = adicionarCliente();
+
+                try {
+                    controller.cadastrar(cliente);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
                 break;
             case 2:
                 // Alterar Cliente

@@ -1,7 +1,6 @@
 package repositories;
 
 import models.Cardapio;
-import models.Cliente;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,15 +45,15 @@ public class CardapioRepository {
         return cardapioBuscado;
     }
 
-    public void deletarPeloId(Cardapio cliente) {
-        cardapios.remove(cliente);
+    public void deletarPeloId(Cardapio cardapio) {
+        cardapios.remove(cardapio);
     }
 
     public int contar() {
         return cardapios.size();
     }
 
-    public Cliente buscarPorNome(String nome) {
+    public Cardapio buscarPorNome(String nome) {
         return null;
     }
 }

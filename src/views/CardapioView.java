@@ -1,5 +1,6 @@
 package views;
 
+import controllers.CardapioController;
 import enums.CategoriaCardapio;
 import models.Cardapio;
 import models.Produto;
@@ -92,7 +93,7 @@ public class CardapioView {
         return cardapio;
     }
 
-    public static void operacaoCardapio(int opcao) {
+    public static void operacaoCardapio(int opcao, CardapioController cardapioController) {
 
         switch (opcao) {
             case 1:

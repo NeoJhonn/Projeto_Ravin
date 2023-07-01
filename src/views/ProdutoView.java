@@ -1,11 +1,13 @@
 package views;
 
+import controllers.ProdutoController;
 import enums.TipoProduto;
 import models.Produto;
 
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class ProdutoView {
 
@@ -117,12 +119,21 @@ public class ProdutoView {
         return produto;
     }
 
-    public static void operacaoProduto(int opcao) {
+    public static void operacaoProduto(int opcao, ProdutoController controller) {
+        Produto produto = null;
+        List<Produto> Produto = null;
+        int id = 0;
 
         switch (opcao) {
             case 1:
                 // Adicionar Produto
-                adicionarProduto();
+                produto = adicionarProduto();
+
+                try {
+                    controller.cadastrar(produto);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
                 break;
             case 2:
                 // Alterar Produto

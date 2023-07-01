@@ -55,7 +55,15 @@ public class FuncionarioRepository {
 	}
 	
 	public Funcionario buscarPorNome(String nome) {
-		return null;
+		Funcionario funcionarioBuscado = null;
+
+		for (Funcionario funcionario : funcionarios) {
+			if (funcionario.getNome().equalsIgnoreCase(nome.trim())) {
+				funcionarioBuscado = funcionario;
+			}
+		}
+
+		return funcionarioBuscado;
 	}
 
 }

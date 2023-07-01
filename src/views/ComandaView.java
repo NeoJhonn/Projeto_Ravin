@@ -1,5 +1,6 @@
 package views;
 
+import controllers.PedidoController;
 import enums.StatusComanda;
 import enums.StatusPreparoPedido;
 import models.Comanda;
@@ -11,9 +12,9 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
-public class PedidoView {
+public class ComandaView {
 
-    public PedidoView() {
+    public ComandaView() {
 
     }
 
@@ -196,7 +197,7 @@ public class PedidoView {
         return pedido;
     }
 
-    public static void operacaoPedido(int opcao) {
+    public static void operacaoPedido(int opcao, PedidoController pedidoController) {
         switch (opcao) {
             case 1:
                 // Adicionar Pedido

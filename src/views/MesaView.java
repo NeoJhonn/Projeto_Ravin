@@ -1,5 +1,6 @@
 package views;
 
+import controllers.MesaController;
 import enums.StatusMesa;
 import models.Mesa;
 
@@ -109,7 +110,7 @@ public class MesaView {
         return mesa;
     }
 
-    public static void operacaoMesa(int opcao) {
+    public static void operacaoMesa(int opcao, MesaController mesaController) {
 
         switch (opcao) {
             case 1:

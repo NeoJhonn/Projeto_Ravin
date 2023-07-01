@@ -1,21 +1,23 @@
 package views;
 
-import enums.*;
-import models.*;
 import controllers.*;
+import models.*;
 
 import javax.swing.*;
-import java.awt.*;
-import java.sql.Timestamp;
-import java.text.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
+
+    // Controllers
     private static FuncionarioController funcionarioController = new FuncionarioController();
+    private static ClienteController clienteController = new ClienteController();
+    private static ProdutoController produtoController = new ProdutoController();
+    private static CardapioController cardapioController = new CardapioController();
+    private static MesaController mesaController = new MesaController();
+    private static PedidoController pedidoController = new PedidoController();
+    private static ComandaController comandaController = new ComandaController();
     private static AtomicInteger idCounter = new AtomicInteger();
 
     public static void main(String[] args) {
@@ -45,27 +47,27 @@ public class Main {
                 case 2:
                     // Chamar menu cliente
                     opcao = Integer.parseInt(JOptionPane.showInputDialog(null, montarSubMenuGeral("Clientes")));
-                    ClienteView.operacaoCliente(opcao);
+                    ClienteView.operacaoCliente(opcao, clienteController);
                     break;
                 case 3:
                     // Chamar menu produto
                     opcao = Integer.parseInt(JOptionPane.showInputDialog(null, montarSubMenuGeral("Produtos")));
-                    ProdutoView.operacaoProduto(opcao);
+                    ProdutoView.operacaoProduto(opcao, produtoController);
                     break;
                 case 4:
                     // Chamar menu cardapio
                     opcao = Integer.parseInt(JOptionPane.showInputDialog(null, montarSubMenuGeral("Cardápio")));
-                    CardapioView.operacaoCardapio(opcao);
+                    CardapioView.operacaoCardapio(opcao, cardapioController);
                     break;
                 case 5:
                     // Chamar menu mesa
                     opcao = Integer.parseInt(JOptionPane.showInputDialog(null, MesaView.montarMenuMesas()));
-                    MesaView.operacaoMesa(opcao);
+                    MesaView.operacaoMesa(opcao, mesaController);
                     break;
                 case 6:
                     // Chamar menu pedido
-                    opcao = Integer.parseInt(JOptionPane.showInputDialog(null, PedidoView.montarMenuPedidos()));
-                    PedidoView.operacaoPedido(opcao);
+                    opcao = Integer.parseInt(JOptionPane.showInputDialog(null, ComandaView.montarMenuPedidos()));
+                    ComandaView.operacaoPedido(opcao, pedidoController);
                     break;
                 case 7:
                     executando = false;
@@ -101,6 +103,7 @@ public class Main {
         builder.append("3 - Excluir \n");
         builder.append("4 - Consultar \n");
         builder.append("5 - Listar todos \n");
+        builder.append("6 - Sair \n");
 
         return builder.toString();
     }
