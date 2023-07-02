@@ -21,17 +21,6 @@ public class Main {
     private static AtomicInteger idCounter = new AtomicInteger();
 
     public static void main(String[] args) {
-        //Produto pdt = cadastrarProduto();
-        //Pedido pd = criarPedido();
-        //Mesa ms = cadastrarMesa();
-        //Comanda cm = adicionarComanda();
-        //Cardapio cd = adicionarCardapio();
-        //Funcionario f = adicionarFuncionario();
-        //Cliente c = adicionarCliente();
-        //System.out.println(f.getNome());
-       // System.out.println(c.getObservacoes());
-
-
         //Menu
         boolean executando = true;
         int opcaoSelecionado = 0;

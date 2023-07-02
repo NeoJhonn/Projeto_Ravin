@@ -1,5 +1,7 @@
 package models;
 
+import util.HandleDates;
+
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -129,7 +131,7 @@ public class Pessoa {
                 ", telefone='" + telefone + '\n' +
                 ", endereco='" + endereco + '\n' +
                 ", cpf='" + cpf + '\n' +
-                ", dataNascimento=" + dataNascimento + '\n' +
+                ", dataNascimento=" + HandleDates.formatarData(dataNascimento) + '\n' +
                 ", ativo=" + ativo + '\n' +
                 ", criadoEM=" + criadoEM + '\n' +
                 ", alteradoEM=" + alteradoEM + '\n' +

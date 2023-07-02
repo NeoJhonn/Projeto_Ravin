@@ -1,6 +1,7 @@
 package models;
 
 import enums.*;
+import util.HandleDates;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -12,14 +13,14 @@ public class Funcionario extends Pessoa {
     private Cargo cargo;
     private int pis;
     private Date dataAdmissao;
-    private Date dataDemissap;
+    private Date dataDemissao;
     private Disponibilidade disponibilidade;
 
     public Funcionario() {
         super();
     }
 
-    public Funcionario(int id, String nome, String telefone, String endereco, String cpf, Date dataNascimento, boolean ativo, Timestamp criadoEM, Timestamp alteradoEM, String criadoPor, String alteradoPor, String rg, EstadoCivil estadoCivil, Escolaridade escolaridade, Cargo cargo, int pis, Date dataAdmissao, Date dataDemissap, Disponibilidade disponibilidade) {
+    public Funcionario(int id, String nome, String telefone, String endereco, String cpf, Date dataNascimento, boolean ativo, Timestamp criadoEM, Timestamp alteradoEM, String criadoPor, String alteradoPor, String rg, EstadoCivil estadoCivil, Escolaridade escolaridade, Cargo cargo, int pis, Date dataAdmissao, Date dataDemissao, Disponibilidade disponibilidade) {
         super(id, nome, telefone, endereco, cpf, dataNascimento, ativo, criadoEM, alteradoEM, criadoPor, alteradoPor);
         this.rg = rg;
         this.estadoCivil = estadoCivil;
@@ -27,7 +28,7 @@ public class Funcionario extends Pessoa {
         this.cargo = cargo;
         this.pis = pis;
         this.dataAdmissao = dataAdmissao;
-        this.dataDemissap = dataDemissap;
+        this.dataDemissao = dataDemissao;
         this.disponibilidade = disponibilidade;
     }
 
@@ -79,12 +80,12 @@ public class Funcionario extends Pessoa {
         this.dataAdmissao = dataAdmissao;
     }
 
-    public Date getDataDemissap() {
-        return dataDemissap;
+    public Date getDataDemissao() {
+        return dataDemissao;
     }
 
-    public void setDataDemissap(Date dataDemissap) {
-        this.dataDemissap = dataDemissap;
+    public void setDataDemissao(Date dataDemissao) {
+        this.dataDemissao = dataDemissao;
     }
 
     public Disponibilidade getDisponibilidade() {
@@ -104,8 +105,8 @@ public class Funcionario extends Pessoa {
                 ", escolaridade=" + escolaridade + '\n' +
                 ", cargo=" + cargo + '\n' +
                 ", pis=" + pis + '\n' +
-                ", dataAdmissao=" + dataAdmissao + '\n' +
-                ", dataDemissap=" + dataDemissap + '\n' +
+                ", dataAdmissao=" + HandleDates.formatarData(dataAdmissao) + '\n' +
+                ", dataDemissão=" + HandleDates.formatarData(dataDemissao) + '\n' +
                 ", disponibilidade=" + disponibilidade + '\n' +
                 "} ";
     }
