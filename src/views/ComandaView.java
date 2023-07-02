@@ -11,6 +11,7 @@ import java.awt.*;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ComandaView {
 
@@ -107,14 +108,14 @@ public class ComandaView {
         return comanda;
     }
 
-    public static Pedido adicionarPedido() {
+    public static Pedido adicionarPedido(AtomicInteger idDinamico) {
+        //adiciona um id dinâmico
+        int id = idDinamico.incrementAndGet();
+
         // Create a panel with GridLayout for the input fields
         JPanel panel = new JPanel(new GridLayout(8, 2));
 
         // Create labels and components for each input field
-        JLabel label1 = new JLabel("ID:");
-        JTextField textField1 = new JTextField(10);
-
         JLabel label2 = new JLabel("Produto:");
         JComboBox<String> comboBox1 = new JComboBox<>();
         comboBox1.addItem("Opção 1");
@@ -141,8 +142,6 @@ public class ComandaView {
         JTextField textField8 = new JTextField(10);
 
         // Add labels and components to the panel
-        panel.add(label1);
-        panel.add(textField1);
         panel.add(label2);
         panel.add(comboBox1);
         panel.add(label3);
@@ -168,7 +167,6 @@ public class ComandaView {
         // Check if the user clicked "OK" (option == 0)
         if (option == JOptionPane.OK_OPTION) {
             // Retrieve the values entered in the text fields and combo boxes
-            int id = Integer.parseInt(textField1.getText());
             Object produto = comboBox1.getSelectedItem();
             Timestamp dataHoraSolicitacao = Timestamp.valueOf(textField3.getText());
             Timestamp dataHoraInicioPreparo = Timestamp.valueOf(textField4.getText());
@@ -197,11 +195,17 @@ public class ComandaView {
         return pedido;
     }
 
-    public static void operacaoPedido(int opcao, PedidoController pedidoController) {
+    public static void operacaoPedido(int opcao, PedidoController pedidoController, AtomicInteger idCounter) {
         switch (opcao) {
             case 1:
                 // Adicionar Pedido
-                adicionarPedido();
+                Pedido pedido = adicionarPedido(idCounter);
+
+                try {
+                    pedidoController.cadastrar(pedido);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
                 break;
             case 2:
                 // Alterar Pedido
@@ -236,7 +240,7 @@ public class ComandaView {
     }
 
     public static String montarMenuPedidos() {
-        String subMenuGeral= Main.montarSubMenuGeral("Pedidos");
+        String subMenuGeral= MenuView.montarSubMenuGeral("Pedidos");
 
         StringBuilder builder = new StringBuilder();
         builder.append(subMenuGeral);

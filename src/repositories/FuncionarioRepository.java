@@ -3,6 +3,7 @@ package repositories;
 import java.util.ArrayList;
 import java.util.List;
 
+import builders.FuncionariosBuilder;
 import models.Funcionario;
 
 public class FuncionarioRepository {
@@ -11,7 +12,8 @@ public class FuncionarioRepository {
 
 	public FuncionarioRepository() {
 
-		funcionarios = new ArrayList<Funcionario>();
+		//funcionarios = new ArrayList<Funcionario>();
+		funcionarios = FuncionariosBuilder.getFuncionarios();
 	}
 
 	public void salvar(Funcionario entidade) {

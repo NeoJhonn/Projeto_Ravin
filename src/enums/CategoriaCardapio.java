@@ -1,7 +1,7 @@
 package enums;
 
 public enum CategoriaCardapio {
-    Bebidas,
-    Lanches,
-    sobremesas
+    Lanche,
+    Bebida,
+    Sobremesa
 }

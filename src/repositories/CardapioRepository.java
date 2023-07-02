@@ -1,5 +1,6 @@
 package repositories;
 
+import interfaces.IRepositoryCRUD;
 import models.Cardapio;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ public class CardapioRepository {
 
         cardapios = new ArrayList<Cardapio>();
     }
+
 
     public void salvar(Cardapio entidade) {
         Cardapio cardapio = buscarPorId(entidade.getId());

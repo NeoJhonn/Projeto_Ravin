@@ -13,20 +13,21 @@ import java.awt.*;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FuncionarioView {
     public FuncionarioView() {
 
     }
 
-    public static Funcionario adicionarFuncionario() {
+    public static Funcionario adicionarFuncionario(AtomicInteger idDinamico) {
+        //adiciona um id dinâmico
+        int id = idDinamico.incrementAndGet();
+
         // Create a panel with GridLayout for the input fields
         JPanel panel = new JPanel(new GridLayout(15, 2));
 
         // Create labels and text fields for each input field
-        JLabel label1 = new JLabel("ID:");
-        JTextField textField1 = new JTextField(10);
-
         JLabel label2 = new JLabel("Nome:");
         JTextField textField2 = new JTextField(10);
 
@@ -76,8 +77,6 @@ public class FuncionarioView {
         JComboBox<Disponibilidade> comboBox5 = new JComboBox<>(disp);
 
         // Add labels and text fields to the panel
-        panel.add(label1);
-        panel.add(textField1);
         panel.add(label2);
         panel.add(textField2);
         panel.add(label3);
@@ -117,7 +116,6 @@ public class FuncionarioView {
         // Check if the user clicked "OK" (option == 0)
         if (option == JOptionPane.OK_OPTION) {
             // Retrieve the values entered in the text fields and combo boxes
-            int id = Integer.parseInt(textField1.getText());
             String nome = textField2.getText();
             String telefone = textField3.getText();
             String endereco = textField4.getText();
@@ -198,24 +196,43 @@ public class FuncionarioView {
         return Integer.parseInt(JOptionPane.showInputDialog("Digite o id do funcionário que você deseja excluir"));
     }
 
-    private static Funcionario mostrarMenuAlterarFuncionario() {
-        Funcionario funcionario = new Funcionario();
-        funcionario.setId(Integer.parseInt(JOptionPane.showInputDialog("Digite o id do funcionario que você deseja alterar")));
-        funcionario.setRg(JOptionPane.showInputDialog("Digite o RG do funcionário:"));
-        funcionario.setEstadoCivil(EstadoCivil.values()[Integer.parseInt(JOptionPane.showInputDialog(
-                "Digite o estado civíl do funcionario: \n [0 - Solteiro \n 1 - Casado \n 2 - Viúvo \n 3 - Divorciado \n 4 - Separado]"))]);
-        funcionario.setCargo(Cargo.values()[Integer.parseInt(JOptionPane.showInputDialog(
-                "Digite o cargo do funcionário: \n 0 - Faxineiro \n 1 - Garçom \n 2 - Cozinheiro \n 3 - Gerente"))]);
-        funcionario.setEscolaridade(Escolaridade.values()[Integer.parseInt(JOptionPane.showInputDialog(
-                "Digite a escolaridade do funcionario: \n 0 - Fundamental \n 1 - Médio \n 2 - Superior "))]);
-        funcionario.setPis(Integer.parseInt(JOptionPane.showInputDialog("Digite o PIS do funcionário")));
-        funcionario.setDataAdmissao(new Date());
+    private static int mostrarMenuIdAlterarFuncionario(List<Funcionario> funcionarios) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(" ==================== Lista de Funcionários ==================== ");
+        builder.append("\n");
 
-        return funcionario;
+        for (Funcionario funcionario: funcionarios) {
+            builder.append(funcionario.getId());
+            builder.append("-");
+            builder.append(funcionario.getNome());
+            builder.append("\n");
+        }
+
+        builder.append("Digite o id do funcinário que você deseja alterar");
+
+        return Integer.parseInt(JOptionPane.showInputDialog(builder.toString()));
+    }
+
+    private static Funcionario mostrarMenuAlterarFuncionario(Funcionario funcionarioALterar) {
+        funcionarioALterar.setNome(JOptionPane.showInputDialog("Digite o Nome do funcionário:", funcionarioALterar.getNome()));
+        funcionarioALterar.setRg(JOptionPane.showInputDialog("Digite o RG do funcionário:", funcionarioALterar.getRg()));
+        funcionarioALterar.setEstadoCivil(EstadoCivil.values()[Integer.parseInt(JOptionPane.showInputDialog(
+                "Digite o estado civíl do funcionario: \n [0 - Solteiro \n 1 - Casado \n 2 - Viúvo \n 3 - Divorciado \n 4 - Separado]",
+                funcionarioALterar.getEstadoCivil()))]);
+        funcionarioALterar.setCargo(Cargo.values()[Integer.parseInt(JOptionPane.showInputDialog(
+                "Digite o cargo do funcionário: \n 0 - Faxineiro \n 1 - Garçom \n 2 - Cozinheiro \n 3 - Gerente",
+                funcionarioALterar.getCargo()))]);
+        funcionarioALterar.setEscolaridade(Escolaridade.values()[Integer.parseInt(JOptionPane.showInputDialog(
+                "Digite a escolaridade do funcionario: \n 0 - Fundamental \n 1 - Médio \n 2 - Superior ",
+                funcionarioALterar.getEscolaridade()))]);
+        funcionarioALterar.setPis(Integer.parseInt(JOptionPane.showInputDialog("Digite o PIS do funcionário", funcionarioALterar.getPis())));
+
+
+        return funcionarioALterar;
     }
 
     public static String montarMenuFuncionarios() {
-        String subMenuGeral= Main.montarSubMenuGeral("Funcionarios");
+        String subMenuGeral= MenuView.montarSubMenuGeral("Funcionarios");
 
         StringBuilder builder = new StringBuilder();
         builder.append(subMenuGeral);
@@ -225,7 +242,7 @@ public class FuncionarioView {
         return builder.toString();
     }
 
-    public static void operacaoFuncionario(int opcao, FuncionarioController controller) {
+    public static void operacaoFuncionario(int opcao, FuncionarioController controller, AtomicInteger idDinamico) {
         Funcionario funcionario = null;
         List<Funcionario> funcionarios = null;
         int id = 0;
@@ -233,7 +250,7 @@ public class FuncionarioView {
         switch (opcao) {
             case 1:
                 // Adicionar Funcionario
-                funcionario = adicionarFuncionario();
+                funcionario = adicionarFuncionario(idDinamico);
 
                 try {
                     controller.cadastrar(funcionario);
@@ -244,7 +261,11 @@ public class FuncionarioView {
                 break;
             case 2:
                 // Alterar Funcionario
-                funcionario = mostrarMenuAlterarFuncionario();
+                funcionarios = controller.listarTodos();
+                int idFuncionarioAlterar = mostrarMenuIdAlterarFuncionario(funcionarios);
+                Funcionario funcionarioALterar = controller.consultar(idFuncionarioAlterar);
+
+                mostrarMenuAlterarFuncionario(funcionarioALterar);
                 break;
             case 3:
                 // Excluir Funcionario

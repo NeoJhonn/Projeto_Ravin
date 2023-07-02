@@ -37,37 +37,37 @@ public class Main {
         int opcaoSelecionado = 0;
 
         while (executando) {
-            opcaoSelecionado = Integer.parseInt(JOptionPane.showInputDialog(montarMenuPrincipal()));
+            opcaoSelecionado = Integer.parseInt(JOptionPane.showInputDialog(MenuView.montarMenuPrincipal()));
             switch (opcaoSelecionado) {
                 case 1:
                     // Chamar menu funcionario
                     int opcao = Integer.parseInt(JOptionPane.showInputDialog(null, FuncionarioView.montarMenuFuncionarios()));
-                    FuncionarioView.operacaoFuncionario(opcao, funcionarioController);
+                    FuncionarioView.operacaoFuncionario(opcao, funcionarioController, idCounter);
                     break;
                 case 2:
                     // Chamar menu cliente
-                    opcao = Integer.parseInt(JOptionPane.showInputDialog(null, montarSubMenuGeral("Clientes")));
-                    ClienteView.operacaoCliente(opcao, clienteController);
+                    opcao = Integer.parseInt(JOptionPane.showInputDialog(null, ClienteView.montarMenuClientes()));
+                    ClienteView.operacaoCliente(opcao, clienteController, idCounter);
                     break;
                 case 3:
                     // Chamar menu produto
-                    opcao = Integer.parseInt(JOptionPane.showInputDialog(null, montarSubMenuGeral("Produtos")));
-                    ProdutoView.operacaoProduto(opcao, produtoController);
+                    opcao = Integer.parseInt(JOptionPane.showInputDialog(null, ProdutoView.montarMenuProdutos()));
+                    ProdutoView.operacaoProduto(opcao, produtoController, idCounter);
                     break;
                 case 4:
                     // Chamar menu cardapio
-                    opcao = Integer.parseInt(JOptionPane.showInputDialog(null, montarSubMenuGeral("Cardápio")));
-                    CardapioView.operacaoCardapio(opcao, cardapioController);
+                    opcao = Integer.parseInt(JOptionPane.showInputDialog(null, CardapioView.montarMenuCardapios()));
+                    CardapioView.operacaoCardapio(opcao, cardapioController, produtoController, idCounter);
                     break;
                 case 5:
                     // Chamar menu mesa
                     opcao = Integer.parseInt(JOptionPane.showInputDialog(null, MesaView.montarMenuMesas()));
-                    MesaView.operacaoMesa(opcao, mesaController);
+                    MesaView.operacaoMesa(opcao, mesaController, funcionarioController, idCounter);
                     break;
                 case 6:
                     // Chamar menu pedido
                     opcao = Integer.parseInt(JOptionPane.showInputDialog(null, ComandaView.montarMenuPedidos()));
-                    ComandaView.operacaoPedido(opcao, pedidoController);
+                    ComandaView.operacaoPedido(opcao, pedidoController, idCounter);
                     break;
                 case 7:
                     executando = false;
@@ -78,37 +78,4 @@ public class Main {
             }
         }
     }
-
-    public static  String montarMenuPrincipal() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("=========================RAVIN========================= \n");
-        builder.append("1 - Funcionário \n");
-        builder.append("2 - Cliente \n");
-        builder.append("3 - Produto \n");
-        builder.append("4 - Cardapio \n");
-        builder.append("5 - Mesa \n");
-        builder.append("6 - Pedido \n");
-        builder.append("7 - Sair \n");
-
-        return builder.toString();
-    }
-
-    public static String montarSubMenuGeral(String modulo) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("========================Gestão de ");
-        builder.append(modulo);
-        builder.append("======================== \n");
-        builder.append("1 - Cadastrar \n");
-        builder.append("2 - Alterar \n");
-        builder.append("3 - Excluir \n");
-        builder.append("4 - Consultar \n");
-        builder.append("5 - Listar todos \n");
-        builder.append("6 - Sair \n");
-
-        return builder.toString();
-    }
-
-
-
-
 }

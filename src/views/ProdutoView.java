@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ProdutoView {
 
@@ -15,14 +16,14 @@ public class ProdutoView {
 
     }
 
-    public static Produto adicionarProduto() {
+    public static Produto adicionarProduto(AtomicInteger idDinamico) {
+        //adiciona um id dinâmico
+        int id = idDinamico.incrementAndGet();
+
         // Create a panel with GridLayout for the input fields
         JPanel panel = new JPanel(new GridLayout(10, 2));
 
         // Create labels and text fields for each input field
-        JLabel label1 = new JLabel("ID:");
-        JTextField textField1 = new JTextField(10);
-
         JLabel label2 = new JLabel("Nome:");
         JTextField textField2 = new JTextField(10);
 
@@ -55,8 +56,6 @@ public class ProdutoView {
         comboBox2.addItem("Não");
 
         // Add labels and text fields to the panel
-        panel.add(label1);
-        panel.add(textField1);
         panel.add(label2);
         panel.add(textField2);
         panel.add(label3);
@@ -86,7 +85,6 @@ public class ProdutoView {
         // Check if the user clicked "OK" (option == 0)
         if (option == JOptionPane.OK_OPTION) {
             // Retrieve the values entered in the text fields and combo boxes
-            int id = Integer.parseInt(textField1.getText());
             String nome = textField2.getText();
             String descricao = textField3.getText();
             String codigo = textField4.getText();
@@ -119,7 +117,7 @@ public class ProdutoView {
         return produto;
     }
 
-    public static void operacaoProduto(int opcao, ProdutoController controller) {
+    public static void operacaoProduto(int opcao, ProdutoController controller, AtomicInteger idCounter) {
         Produto produto = null;
         List<Produto> Produto = null;
         int id = 0;
@@ -127,7 +125,7 @@ public class ProdutoView {
         switch (opcao) {
             case 1:
                 // Adicionar Produto
-                produto = adicionarProduto();
+                produto = adicionarProduto(idCounter);
 
                 try {
                     controller.cadastrar(produto);
@@ -150,5 +148,15 @@ public class ProdutoView {
             default:
                 break;
         }
+    }
+
+    public static String montarMenuProdutos() {
+        String subMenuGeral= MenuView.montarSubMenuGeral("Produtos");
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(subMenuGeral);
+        builder.append("6 - Voltar \n");
+
+        return builder.toString();
     }
 }

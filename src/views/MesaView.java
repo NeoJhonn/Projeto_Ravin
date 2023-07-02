@@ -1,7 +1,9 @@
 package views;
 
+import controllers.FuncionarioController;
 import controllers.MesaController;
 import enums.StatusMesa;
+import models.Funcionario;
 import models.Mesa;
 
 import javax.swing.*;
@@ -9,6 +11,7 @@ import java.awt.*;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MesaView {
 
@@ -16,18 +19,23 @@ public class MesaView {
 
     }
 
-    public static Mesa adicionarMesa() {
+    public static Mesa adicionarMesa(AtomicInteger idDinamico, FuncionarioController funcionarioController) {
+        //adiciona um id dinâmico
+        int id = idDinamico.incrementAndGet();
+
         // Create a panel with GridLayout for the input fields
         JPanel panel = new JPanel(new GridLayout(8, 2));
 
         // Create labels and components for each input field
-        JLabel label1 = new JLabel("ID:");
-        JTextField textField1 = new JTextField(10);
-
         JLabel label2 = new JLabel("Funcionário:");
-        JComboBox<String> comboBox1 = new JComboBox<>();
-        comboBox1.addItem("Opção 1");
-        comboBox1.addItem("Opção 2");
+        String[] funcionarios = new String[funcionarioController.listarGarconsDisponiveis().size()];
+        for (int i=0; i < funcionarioController.listarGarconsDisponiveis().size(); i++) {
+            Funcionario funcionario = funcionarioController.listarGarconsDisponiveis().get(i);
+            funcionarios[i] = funcionario.getNome();
+        }
+
+        JComboBox<String> comboBox1 = new JComboBox<>(funcionarios);
+
 
         JLabel label3 = new JLabel("Comandas:");
         JComboBox<String> comboBox2 = new JComboBox<>();
@@ -52,8 +60,6 @@ public class MesaView {
         comboBox3.addItem("Opção 2");
 
         // Add labels and components to the panel
-        panel.add(label1);
-        panel.add(textField1);
         panel.add(label2);
         panel.add(comboBox1);
         panel.add(label3);
@@ -79,8 +85,7 @@ public class MesaView {
         // Check if the user clicked "OK" (option == 0)
         if (option == JOptionPane.OK_OPTION) {
             // Retrieve the values entered in the text fields and combo boxes
-            int id = Integer.parseInt(textField1.getText());
-            String funcionario = (String) comboBox1.getSelectedItem();
+            String funcionarioNome = (String) comboBox1.getSelectedItem();
             List<String> comandas = new ArrayList<>();
             comandas.add((String) comboBox2.getSelectedItem());
             String nome = textField4.getText();
@@ -89,10 +94,12 @@ public class MesaView {
             int quantidadeMaximaPessoas = Integer.parseInt(textField7.getText());
             String statusMesa = (String) comboBox3.getSelectedItem();
 
+            Funcionario funcionario = funcionarioController.listarGarconsDisponiveis().stream().filter(f -> f.getNome() == nome).findFirst().orElse(null);
+
             // Criar Mesa
             mesa = new Mesa(
                     id,
-                    null,
+                    funcionario,
                     null,
                     nome,
                     codigo,
@@ -110,12 +117,18 @@ public class MesaView {
         return mesa;
     }
 
-    public static void operacaoMesa(int opcao, MesaController mesaController) {
+    public static void operacaoMesa(int opcao, MesaController mesaController, FuncionarioController funcionarioController, AtomicInteger idCounter) {
 
         switch (opcao) {
             case 1:
                 // Adicionar Mesa
-                MesaView.adicionarMesa();
+                Mesa mesa = MesaView.adicionarMesa(idCounter, funcionarioController);
+
+                try {
+                    mesaController.cadastrar(mesa);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
                 break;
             case 2:
                 // Alterar Mesa
@@ -144,7 +157,7 @@ public class MesaView {
     }
 
     public static String montarMenuMesas() {
-        String subMenuGeral= Main.montarSubMenuGeral("Mesas");
+        String subMenuGeral= MenuView.montarSubMenuGeral("Mesas");
 
         StringBuilder builder = new StringBuilder();
         builder.append(subMenuGeral);

@@ -8,8 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.sql.Timestamp;
 import java.util.List;
-
-import static views.FuncionarioView.adicionarFuncionario;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ClienteView {
 
@@ -17,7 +16,7 @@ public class ClienteView {
 
     }
 
-    public static void operacaoCliente(int opcao, ClienteController controller) {
+    public static void operacaoCliente(int opcao, ClienteController controller, AtomicInteger idCounter) {
         Cliente cliente = null;
         List<Cliente> clientes = null;
         int id = 0;
@@ -25,7 +24,7 @@ public class ClienteView {
         switch (opcao) {
             case 1:
                 // Adicionar Cliente
-                cliente = adicionarCliente();
+                cliente = adicionarCliente(idCounter);
 
                 try {
                     controller.cadastrar(cliente);
@@ -50,14 +49,14 @@ public class ClienteView {
         }
     }
 
-    public static Cliente adicionarCliente() {
+    public static Cliente adicionarCliente(AtomicInteger idDinamico) {
+        //adiciona um id dinâmico
+        int id = idDinamico.incrementAndGet();
+
         // Create a panel with GridLayout for the input fields
         JPanel panel = new JPanel(new GridLayout(9, 2));
 
         // Create labels and text fields for each input field
-        JLabel label1 = new JLabel("ID:");
-        JTextField textField1 = new JTextField(10);
-
         JLabel label2 = new JLabel("Nome:");
         JTextField textField2 = new JTextField(10);
 
@@ -87,8 +86,6 @@ public class ClienteView {
         comboBox2.addItem("Não");
 
         // Add labels and text fields to the panel
-        panel.add(label1);
-        panel.add(textField1);
         panel.add(label2);
         panel.add(textField2);
         panel.add(label3);
@@ -115,7 +112,6 @@ public class ClienteView {
         // Check if the user clicked "OK" (option == 0)
         if (option == JOptionPane.OK_OPTION) {
             // Retrieve the values entered in the text fields and combo boxes
-            int id = Integer.parseInt(textField1.getText());
             String nome = textField2.getText();
             String telefone = textField3.getText();
             String endereco = textField4.getText();
@@ -143,5 +139,15 @@ public class ClienteView {
         }
 
         return cliente;
+    }
+
+    public static String montarMenuClientes() {
+        String subMenuGeral= MenuView.montarSubMenuGeral("Clientes");
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(subMenuGeral);
+        builder.append("6 - Voltar \n");
+
+        return builder.toString();
     }
 }

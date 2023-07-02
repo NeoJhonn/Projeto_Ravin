@@ -1,14 +1,18 @@
 package views;
 
 import controllers.CardapioController;
+import controllers.ProdutoController;
 import enums.CategoriaCardapio;
+import enums.Escolaridade;
 import models.Cardapio;
 import models.Produto;
 
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CardapioView {
 
@@ -16,14 +20,17 @@ public class CardapioView {
 
     }
 
-    public static Cardapio adicionarCardapio(List<Produto> produtos) {
+    public static Cardapio adicionarCardapio(List<Produto> produtosCriados, AtomicInteger idCounter) {
+        //adiciona um id dinâmico
+        int id = idCounter.incrementAndGet();
+
+        //Lista de Produtos do cardápio
+        List<Produto> produtos = new ArrayList<Produto>();
+
         // Create a panel with GridLayout for the input fields
         JPanel panel = new JPanel(new GridLayout(6, 2));
 
         // Create labels and text fields for each input field
-        JLabel label1 = new JLabel("ID:");
-        JTextField textField1 = new JTextField(10);
-
         JLabel label2 = new JLabel("Nome:");
         JTextField textField2 = new JTextField(10);
 
@@ -34,9 +41,8 @@ public class CardapioView {
         JTextField textField4 = new JTextField(10);
 
         JLabel label5 = new JLabel("Categoria do Cardápio:");
-        JComboBox<String> comboBox1 = new JComboBox<>();
-        comboBox1.addItem("Opção 1");
-        comboBox1.addItem("Opção 2");
+        CategoriaCardapio[] categorias = CategoriaCardapio.values();
+        JComboBox<CategoriaCardapio> comboBox1 = new JComboBox<>(categorias);
 
         JLabel label6 = new JLabel("Ativo:");
         JComboBox<String> comboBox2 = new JComboBox<>();
@@ -44,8 +50,6 @@ public class CardapioView {
         comboBox2.addItem("Não");
 
         // Add labels and text fields to the panel
-        panel.add(label1);
-        panel.add(textField1);
         panel.add(label2);
         panel.add(textField2);
         panel.add(label3);
@@ -67,12 +71,17 @@ public class CardapioView {
         // Check if the user clicked "OK" (option == 0)
         if (option == JOptionPane.OK_OPTION) {
             // Retrieve the values entered in the text fields and combo boxes
-            int id = Integer.parseInt(textField1.getText());
             String nome = textField2.getText();
             String codigo = textField3.getText();
             String descricao = textField4.getText();
-            String categoriaCardapio = (String) comboBox1.getSelectedItem();
+            CategoriaCardapio categoriaCardapio = (CategoriaCardapio) comboBox1.getSelectedItem();
             boolean ativo = comboBox2.getSelectedItem().equals("Sim");
+
+            for (Produto p : produtosCriados) {
+                if (String.valueOf(p.getTipoProduto()) == String.valueOf(categoriaCardapio)) {
+                    produtos.add(p);
+                }
+            }
 
             // Criar o objeto
             cardapio = new Cardapio(
@@ -81,7 +90,7 @@ public class CardapioView {
                     nome,
                     codigo,
                     descricao,
-                    CategoriaCardapio.Lanches,
+                    categoriaCardapio,
                     ativo,
                     new Timestamp(System.currentTimeMillis()),
                     new Timestamp(System.currentTimeMillis()),
@@ -93,12 +102,18 @@ public class CardapioView {
         return cardapio;
     }
 
-    public static void operacaoCardapio(int opcao, CardapioController cardapioController) {
+    public static void operacaoCardapio(int opcao, CardapioController cardapioController,ProdutoController produtoController, AtomicInteger idCounter) {
 
         switch (opcao) {
             case 1:
                 // Adicionar Cardapio
-                CardapioView.adicionarCardapio(null);
+                Cardapio cardapio = CardapioView.adicionarCardapio(produtoController.listarTodos(), idCounter);
+
+                try {
+                    cardapioController.cadastrar(cardapio);
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage());
+                }
                 break;
             case 2:
                 // Alterar Cardapio
@@ -115,5 +130,15 @@ public class CardapioView {
             default:
                 break;
         }
+    }
+
+    public static String montarMenuCardapios() {
+        String subMenuGeral= MenuView.montarSubMenuGeral("Cardápios");
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(subMenuGeral);
+        builder.append("6 - Voltar \n");
+
+        return builder.toString();
     }
 }
