@@ -1,14 +1,13 @@
 package views;
 
 import controllers.*;
-import models.*;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Main {
+import static views.MenuView.menuPrincipalRavin;
+
+public class Main extends JFrame {
 
     // Controllers
     private static FuncionarioController funcionarioController = new FuncionarioController();
@@ -21,22 +20,24 @@ public class Main {
     private static AtomicInteger idCounter = new AtomicInteger();
 
     public static void main(String[] args) {
+        menuPrincipalRavin(funcionarioController,clienteController, idCounter);
+
+
+
         //Menu
         boolean executando = true;
-        int opcaoSelecionado = 0;
+        int opcaoSelecionado = 0; 
 
         while (executando) {
             opcaoSelecionado = Integer.parseInt(JOptionPane.showInputDialog(MenuView.montarMenuPrincipal()));
+
             switch (opcaoSelecionado) {
                 case 1:
-                    // Chamar menu funcionario
-                    int opcao = Integer.parseInt(JOptionPane.showInputDialog(null, FuncionarioView.montarMenuFuncionarios()));
-                    FuncionarioView.operacaoFuncionario(opcao, funcionarioController, idCounter);
+
+                    int opcao =0;
                     break;
                 case 2:
-                    // Chamar menu cliente
-                    opcao = Integer.parseInt(JOptionPane.showInputDialog(null, ClienteView.montarMenuClientes()));
-                    ClienteView.operacaoCliente(opcao, clienteController, idCounter);
+
                     break;
                 case 3:
                     // Chamar menu produto

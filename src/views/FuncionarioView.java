@@ -151,7 +151,7 @@ public class FuncionarioView {
         return funcionario;
     }
 
-    private static void listarGarconsDisponiveis(List<Funcionario> funcionarios) {
+    public static void listarGarconsDisponiveis(List<Funcionario> funcionarios) {
         StringBuilder builder = new StringBuilder();
 
         builder.append(" ==================== Garçons Disponíveis ==================== ");
@@ -186,7 +186,7 @@ public class FuncionarioView {
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
     }
 
-    private static void listarFuncionarios(List<Funcionario> funcionarios) {
+    public static void listarFuncionarios(List<Funcionario> funcionarios) {
         StringBuilder builder = new StringBuilder();
 
         builder.append(" ==================== Funcionários ==================== ");
@@ -220,7 +220,7 @@ public class FuncionarioView {
 
     }
 
-    private static int mostrarMenuConsultarFuncionario(List<Funcionario> funcionarios) {
+    public static int mostrarMenuConsultarFuncionario(List<Funcionario> funcionarios) {
         StringBuilder builder = new StringBuilder();
         builder.append(" ==================== Lista de Funcionários ==================== ");
         builder.append("\n");
@@ -237,7 +237,7 @@ public class FuncionarioView {
         return Integer.parseInt(JOptionPane.showInputDialog(builder));
     }
 
-    private static int mostrarMenuExcluirFuncionario(List<Funcionario> funcionarios) {
+    public static int mostrarMenuExcluirFuncionario(List<Funcionario> funcionarios) {
         StringBuilder builder = new StringBuilder();
         builder.append(" ==================== Lista de Funcionários ==================== ");
         builder.append("\n");
@@ -254,7 +254,7 @@ public class FuncionarioView {
         return Integer.parseInt(JOptionPane.showInputDialog(builder));
     }
 
-    private static int mostrarMenuIdAlterarFuncionario(List<Funcionario> funcionarios) {
+    public static int mostrarMenuIdAlterarFuncionario(List<Funcionario> funcionarios) {
         StringBuilder builder = new StringBuilder();
         builder.append(" ==================== Lista de Funcionários ==================== ");
         builder.append("\n");
@@ -271,7 +271,7 @@ public class FuncionarioView {
         return Integer.parseInt(JOptionPane.showInputDialog(builder.toString()));
     }
 
-    private static Funcionario mostrarMenuAlterarFuncionario(Funcionario funcionarioALterar) {
+    public static Funcionario mostrarMenuAlterarFuncionario(Funcionario funcionarioALterar) {
         // Create a panel with GridLayout for the input fields
         JPanel panel = new JPanel(new GridLayout(15, 2));
 
