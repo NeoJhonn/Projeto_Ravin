@@ -17,16 +17,17 @@ public class Main extends JFrame {
     private static MesaController mesaController = new MesaController();
     private static PedidoController pedidoController = new PedidoController();
     private static ComandaController comandaController = new ComandaController();
+    // Contador para os ID
     private static AtomicInteger idCounter = new AtomicInteger();
 
     public static void main(String[] args) {
-        menuPrincipalRavin(funcionarioController,clienteController, idCounter);
+        menuPrincipalRavin(funcionarioController,clienteController, produtoController, cardapioController, mesaController, pedidoController, comandaController, idCounter);
 
 
 
         //Menu
         boolean executando = true;
-        int opcaoSelecionado = 0; 
+        int opcaoSelecionado = 0;
 
         while (executando) {
             opcaoSelecionado = Integer.parseInt(JOptionPane.showInputDialog(MenuView.montarMenuPrincipal()));
@@ -40,9 +41,6 @@ public class Main extends JFrame {
 
                     break;
                 case 3:
-                    // Chamar menu produto
-                    opcao = Integer.parseInt(JOptionPane.showInputDialog(null, ProdutoView.montarMenuProdutos()));
-                    ProdutoView.operacaoProduto(opcao, produtoController, idCounter);
                     break;
                 case 4:
                     // Chamar menu cardapio

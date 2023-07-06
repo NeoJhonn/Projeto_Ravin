@@ -17,39 +17,6 @@ public class ClienteView {
 
     }
 
-    public static void operacaoCliente(int opcao, ClienteController controller, AtomicInteger idCounter) {
-        Cliente cliente = null;
-        List<Cliente> clientes = null;
-        int id = 0;
-
-        switch (opcao) {
-            case 1:
-                // Adicionar Cliente
-                cliente = adicionarCliente(idCounter);
-
-                try {
-                    controller.cadastrar(cliente);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage());
-                }
-                break;
-            case 2:
-                // Alterar Cliente
-                break;
-            case 3:
-                // Excluir Cliente
-                break;
-            case 4:
-                // Consultar Cliente
-                break;
-            case 5:
-                // Listar todos
-                break;
-            default:
-                break;
-        }
-    }
-
     public static Cliente adicionarCliente(AtomicInteger idDinamico) {
         //adiciona um id dinâmico
         int id = idDinamico.incrementAndGet();
@@ -142,16 +109,6 @@ public class ClienteView {
         return cliente;
     }
 
-    public static String montarMenuClientes() {
-        String subMenuGeral= MenuView.montarSubMenuGeral("Clientes");
-
-        StringBuilder builder = new StringBuilder();
-        builder.append(subMenuGeral);
-        builder.append("6 - Voltar \n");
-
-        return builder.toString();
-    }
-
     public static int mostrarMenuIdAlterarCliente(List<Cliente> clientes) {
         StringBuilder builder = new StringBuilder();
         builder.append(" ==================== Lista de Clientes ==================== ");
@@ -240,7 +197,7 @@ public class ClienteView {
         comboBox2.setSelectedItem(status);
 
         // Display the input dialog
-        int option = JOptionPane.showOptionDialog(null, panel, "Cadastro de Cliente", JOptionPane.OK_CANCEL_OPTION,
+        int option = JOptionPane.showOptionDialog(null, panel, "Alterar Cliente", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
 
         // Inicializar objeto Cliente

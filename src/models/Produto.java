@@ -152,4 +152,24 @@ public class Produto {
     public void setAlteradoPor(String alteradoPor) {
         AlteradoPor = alteradoPor;
     }
+
+    @Override
+    public String toString() {
+        return "Produto{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", codigo='" + codigo + '\'' +
+                ", precoCusto=" + precoCusto +
+                ", precoVenda=" + precoVenda +
+                ", tempoPreparo='" + tempoPreparo + '\'' +
+                ", observacoes='" + observacoes + '\'' +
+                ", tipoProduto=" + tipoProduto +
+                ", ativo=" + ativo +
+                ", criadoEM=" + criadoEM +
+                ", alteradoEM=" + alteradoEM +
+                ", criadoPor='" + criadoPor + '\'' +
+                ", AlteradoPor='" + AlteradoPor + '\'' +
+                '}' + "\n";
+    }
 }

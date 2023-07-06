@@ -1,9 +1,9 @@
 package views;
 
-import controllers.ClienteController;
-import controllers.FuncionarioController;
+import controllers.*;
 import models.Cliente;
 import models.Funcionario;
+import models.Produto;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static views.ClienteView.*;
 import static views.FuncionarioView.*;
+import static views.ProdutoView.*;
 
 public class MenuView extends JFrame {
 
@@ -45,15 +46,14 @@ public class MenuView extends JFrame {
         return builder.toString();
     }
 
-    public static void menuPrincipalRavin(FuncionarioController funcionarioController, ClienteController clienteControllercontroller, AtomicInteger idDinamico) {
-        int id = 0;
-
-
+    public static void menuPrincipalRavin(FuncionarioController funcionarioController, ClienteController clienteController, ProdutoController produtoController, CardapioController cardapioController, MesaController mesaController, PedidoController pedidoController, ComandaController comandaController, AtomicInteger idDinamico) {
         JFrame frame = new JFrame();
         frame.setTitle("Restaurante Ravin");
         frame.setSize(640, 480);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
+        // Centraliza a janela na tela
+        frame.setLocationRelativeTo(null);
 
         JLabel label = new JLabel("Restaurante Ravin");
         label.setHorizontalAlignment(SwingConstants.CENTER);
@@ -68,7 +68,9 @@ public class MenuView extends JFrame {
             JButton button = new JButton(option);
             JPopupMenu popupMenu = new JPopupMenu();
             dropdownFuncionario(options, option, popupMenu, button, toolbar, idDinamico, funcionarioController);
-            dropdownCliente(options, option, popupMenu, button, toolbar, idDinamico, clienteControllercontroller);
+            dropdownCliente(options, option, popupMenu, button, toolbar, idDinamico, clienteController);
+            dropdownProduto(options, option, popupMenu, button, toolbar, idDinamico, produtoController);
+
         }
 
         frame.add(toolbar, BorderLayout.NORTH);
@@ -243,4 +245,84 @@ public class MenuView extends JFrame {
             });
         }
     }
+
+    public static void dropdownProduto(String[] options, String option, JPopupMenu popupMenu, JButton button, JToolBar toolbar, AtomicInteger idDinamico, ProdutoController controller) {
+        if(option == options[2]) {
+            JMenuItem item1 = new JMenuItem("Cadastrar");
+            JMenuItem item2 = new JMenuItem("Alterar");
+            JMenuItem item3 = new JMenuItem("Excluir");
+            JMenuItem item4 = new JMenuItem("Consultar");
+            JMenuItem item5 = new JMenuItem("Listar Todos");
+            popupMenu.add(item1);
+            popupMenu.add(item2);
+            popupMenu.add(item3);
+            popupMenu.add(item4);
+            popupMenu.add(item5);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    popupMenu.show(button, 0, button.getHeight());
+                }
+            });
+            toolbar.add(button);
+
+
+            item1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Adicionar Produto
+                    Produto produto = adicionarProduto(idDinamico);
+
+                    try {
+                        controller.cadastrar(produto);
+                    } catch (Exception f) {
+                        JOptionPane.showMessageDialog(null, f.getMessage());
+                    }
+                }
+            });
+
+            item2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Alterar Produto
+                    List<Produto> produtos = controller.listarTodos();
+                    int idProdutoAlterar = mostrarMenuIdAlterarProduto(produtos);
+                    Produto produtoALterar = controller.consultar(idProdutoAlterar);
+
+                    mostrarMenuAlterarProduto(produtoALterar);
+                }
+            });
+
+            item3.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Excluir Produto
+                    List<Produto> produtos = controller.listarTodos();
+                    int id = mostrarMenuExcluirProduto(produtos);
+                    controller.excluir(id);
+                }
+            });
+
+            item4.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Consultar Produto
+                    List<Produto> produtos = controller.listarTodos();
+                    int id = mostrarMenuConsultarProduto(produtos);
+                    Produto produtoBuscado = controller.consultar(id);
+                    JOptionPane.showMessageDialog(null, produtoBuscado);
+                }
+            });
+
+            item5.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Listar todos
+                    List<Produto> produtos = controller.listarTodos();
+                    listarProdutos(produtos);
+                }
+            });
+        }
+    }
+
 }
