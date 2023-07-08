@@ -123,4 +123,21 @@ public class Cardapio {
     public void setAlteradoPor(String alteradoPor) {
         AlteradoPor = alteradoPor;
     }
+
+
+    public String toString(String produtos) {
+        return "Cardapio{" + "\n" +
+                "id= " + id + "\n" +
+                "nome= " + nome + "\n" +
+                "produtos= " + produtos + "\n" +
+                "codigo= " + codigo + "\n" +
+                "descricao= " + descricao + "\n" +
+                "categoriaCardapio= " + categoriaCardapio + "\n" +
+                "ativo= " + ativo + "\n" +
+                "criadoEM= " + criadoEM + "\n" +
+                "alteradoEM= " + alteradoEM + "\n" +
+                "criadoPor= " + criadoPor + "\n" +
+                "AlteradoPor= " + AlteradoPor + "\n" +
+                '}'+ "\n";
+    }
 }

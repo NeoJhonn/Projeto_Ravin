@@ -43,11 +43,10 @@ public class Main extends JFrame {
                 case 3:
                     break;
                 case 4:
-                    // Chamar menu cardapio
-                    opcao = Integer.parseInt(JOptionPane.showInputDialog(null, CardapioView.montarMenuCardapios()));
-                    CardapioView.operacaoCardapio(opcao, cardapioController, produtoController, idCounter);
+
                     break;
                 case 5:
+                    opcao = 0;
                     // Chamar menu mesa
                     opcao = Integer.parseInt(JOptionPane.showInputDialog(null, MesaView.montarMenuMesas()));
                     MesaView.operacaoMesa(opcao, mesaController, funcionarioController, idCounter);

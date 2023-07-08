@@ -200,8 +200,6 @@ public class ClienteView {
         int option = JOptionPane.showOptionDialog(null, panel, "Alterar Cliente", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
 
-        // Inicializar objeto Cliente
-        Cliente cliente = null;
         // Check if the user clicked "OK" (option == 0)
         if (option == JOptionPane.OK_OPTION) {
             // Retrieve the values entered in the text fields and combo boxes

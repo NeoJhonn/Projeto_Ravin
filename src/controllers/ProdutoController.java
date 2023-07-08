@@ -1,8 +1,11 @@
 package controllers;
 
+import enums.CategoriaCardapio;
+import enums.TipoProduto;
 import models.Produto;
 import repositories.ProdutoRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProdutoController {
@@ -39,5 +42,17 @@ public class ProdutoController {
     public List<Produto> listarTodos() {
 
         return repository.listarTodos();
+    }
+
+    public String listarProdutosCardapio(CategoriaCardapio categoriaCardapio) {
+        String produtos = "";
+
+        for (Produto p: repository.listarTodos()) {
+            if ( String.valueOf(p.getTipoProduto()) == String.valueOf(categoriaCardapio)) {
+                produtos += p.getNome() +", ";
+            }
+        }
+
+        return produtos;
     }
 }

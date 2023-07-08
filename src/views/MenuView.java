@@ -1,6 +1,7 @@
 package views;
 
 import controllers.*;
+import models.Cardapio;
 import models.Cliente;
 import models.Funcionario;
 import models.Produto;
@@ -12,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static views.CardapioView.*;
 import static views.ClienteView.*;
 import static views.FuncionarioView.*;
 import static views.ProdutoView.*;
@@ -70,7 +72,7 @@ public class MenuView extends JFrame {
             dropdownFuncionario(options, option, popupMenu, button, toolbar, idDinamico, funcionarioController);
             dropdownCliente(options, option, popupMenu, button, toolbar, idDinamico, clienteController);
             dropdownProduto(options, option, popupMenu, button, toolbar, idDinamico, produtoController);
-
+            dropdownCardapio(options, option, popupMenu, button, toolbar, idDinamico, cardapioController, produtoController);
         }
 
         frame.add(toolbar, BorderLayout.NORTH);
@@ -325,4 +327,82 @@ public class MenuView extends JFrame {
         }
     }
 
+    public static void dropdownCardapio(String[] options, String option, JPopupMenu popupMenu, JButton button, JToolBar toolbar, AtomicInteger idDinamico, CardapioController controller, ProdutoController produtoController) {
+        if(option == options[3]) {
+            JMenuItem item1 = new JMenuItem("Cadastrar");
+            JMenuItem item2 = new JMenuItem("Alterar");
+            JMenuItem item3 = new JMenuItem("Excluir");
+            JMenuItem item4 = new JMenuItem("Consultar");
+            JMenuItem item5 = new JMenuItem("Listar Todos");
+            popupMenu.add(item1);
+            popupMenu.add(item2);
+            popupMenu.add(item3);
+            popupMenu.add(item4);
+            popupMenu.add(item5);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    popupMenu.show(button, 0, button.getHeight());
+                }
+            });
+            toolbar.add(button);
+
+
+            item1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Adicionar Cardapio
+                    Cardapio cardapio = CardapioView.adicionarCardapio(idDinamico);
+
+                    try {
+                        controller.cadastrar(cardapio);
+                    } catch (Exception f) {
+                        JOptionPane.showMessageDialog(null, f.getMessage());
+                    }
+                }
+            });
+
+            item2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Alterar Cardápio
+                    List<Cardapio> cardapios = controller.listarTodos();
+                    int idCardapioAlterar = mostrarMenuIdAlterarCardapio(cardapios);
+                    Cardapio cardapioALterar = controller.consultar(idCardapioAlterar);
+
+                    mostrarMenuAlterarCardapio(cardapioALterar);
+                }
+            });
+
+            item3.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Excluir Cardapio
+                    List<Cardapio> cardapios = controller.listarTodos();
+                    int id = mostrarMenuExcluirCardapio(cardapios);
+                    controller.excluir(id);
+                }
+            });
+
+            item4.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Consultar Cardápio
+                    List<Cardapio> cardapios = controller.listarTodos();
+                    int id = mostrarMenuConsultarCardapio(cardapios);
+                    Cardapio cardapioBuscado = controller.consultar(id);
+                    JOptionPane.showMessageDialog(null, cardapioBuscado.toString(produtoController.listarProdutosCardapio(cardapioBuscado.getCategoriaCardapio())));
+                }
+            });
+
+            item5.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Listar todos
+                    List<Cardapio> cardapios = controller.listarTodos();
+                    listarCardapios(cardapios, produtoController);
+                }
+            });
+        }
+    }
 }
