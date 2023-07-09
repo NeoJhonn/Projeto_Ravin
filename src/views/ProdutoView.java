@@ -120,49 +120,6 @@ public class ProdutoView {
         return produto;
     }
 
-    public static void operacaoProduto(int opcao, ProdutoController controller, AtomicInteger idCounter) {
-        Produto produto = null;
-        List<Produto> Produto = null;
-        int id = 0;
-
-        switch (opcao) {
-            case 1:
-                // Adicionar Produto
-                produto = adicionarProduto(idCounter);
-
-                try {
-                    controller.cadastrar(produto);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage());
-                }
-                break;
-            case 2:
-                // Alterar Produto
-                break;
-            case 3:
-                // Excluir Produto
-                break;
-            case 4:
-                // Consultar Produto
-                break;
-            case 5:
-                // Listar Produtos
-                break;
-            default:
-                break;
-        }
-    }
-
-    public static String montarMenuProdutos() {
-        String subMenuGeral= MenuView.montarSubMenuGeral("Produtos");
-
-        StringBuilder builder = new StringBuilder();
-        builder.append(subMenuGeral);
-        builder.append("6 - Voltar \n");
-
-        return builder.toString();
-    }
-
     public static int mostrarMenuIdAlterarProduto(List<Produto> produtos) {
         StringBuilder builder = new StringBuilder();
         builder.append(" ==================== Lista de Produtos ==================== ");

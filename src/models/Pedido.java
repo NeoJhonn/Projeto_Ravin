@@ -1,6 +1,7 @@
 package models;
 
-import enums.StatusPreparoPedido;
+import enums.StatusPreparo;
+import enums.StatusPreparo;
 
 import java.sql.Timestamp;
 
@@ -10,7 +11,7 @@ public class Pedido {
     private Timestamp dataHoraSolicitacao;
     private Timestamp dataHoraInicioPreparo;
     private Timestamp tempoPreparoRestante;
-    private StatusPreparoPedido statusPreparo;
+    private StatusPreparo statusPreparo;
     private String observacao;
     private int quantidade;
     private Timestamp criadoEM;
@@ -22,7 +23,7 @@ public class Pedido {
 
     }
 
-    public Pedido(int id, Produto produto, Timestamp dataHoraSolicitacao, Timestamp dataHoraInicioPreparo, Timestamp tempoPreparoRestante, StatusPreparoPedido statusPreparo, String observacao, int quantidade, Timestamp criadoEM, Timestamp alteradoEM, String criadoPor, String alteradoPor) {
+    public Pedido(int id, Produto produto, Timestamp dataHoraSolicitacao, Timestamp dataHoraInicioPreparo, Timestamp tempoPreparoRestante, StatusPreparo statusPreparo, String observacao, int quantidade, Timestamp criadoEM, Timestamp alteradoEM, String criadoPor, String alteradoPor) {
         this.id = id;
         this.produto = produto;
         this.dataHoraSolicitacao = dataHoraSolicitacao;
@@ -77,11 +78,11 @@ public class Pedido {
         this.tempoPreparoRestante = tempoPreparoRestante;
     }
 
-    public StatusPreparoPedido getStatusPreparo() {
+    public StatusPreparo getStatusPreparo() {
         return statusPreparo;
     }
 
-    public void setStatusPreparo(StatusPreparoPedido statusPreparo) {
+    public void setStatusPreparo(StatusPreparo statusPreparo) {
         this.statusPreparo = statusPreparo;
     }
 

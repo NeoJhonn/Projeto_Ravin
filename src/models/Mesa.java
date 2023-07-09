@@ -8,6 +8,7 @@ import java.util.List;
 public class Mesa {
     private int id;
     private Funcionario funcionario;
+    private Cliente cliente;
     private List<Comanda> comandas;
     private String nome;
     private String codigo;
@@ -152,5 +153,48 @@ public class Mesa {
 
     public void setAlteradoPor(String alteradoPor) {
         AlteradoPor = alteradoPor;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    @Override
+    public String toString() {
+        return "Mesa{" + "\n" +
+                "id=" + id + "\n" +
+                ", funcionario=" + funcionario.getNome() + "\n" +
+                ", comandas=" + comandas + "\n" +
+                ", nome='" + nome + "\n" +
+                ", codigo='" + codigo + "\n" +
+                ", numero=" + numero + "\n" +
+                ", quantidadeMaximaPessoas=" + quantidadeMaximaPessoas + "\n" +
+                ", statusMesa=" + statusMesa + "\n" +
+                ", criadoEM=" + criadoEM + "\n" +
+                ", alteradoEM=" + alteradoEM + "\n" +
+                ", criadoPor='" + criadoPor + "\n" +
+                ", AlteradoPor='" + AlteradoPor + "\n" +
+                '}' + "\n";
+    }
+
+    public String toString(Cliente cliente) {
+        return "Mesa{" + "\n" +
+                "id=" + id + "\n" +
+                ", Reservada para=" + cliente.getNome() + "\n" +
+                ", comandas=" + comandas + "\n" +
+                ", nome='" + nome + "\n" +
+                ", codigo='" + codigo + "\n" +
+                ", numero=" + numero + "\n" +
+                ", quantidadeMaximaPessoas=" + quantidadeMaximaPessoas + "\n" +
+                ", statusMesa=" + statusMesa + "\n" +
+                ", criadoEM=" + criadoEM + "\n" +
+                ", alteradoEM=" + alteradoEM + "\n" +
+                ", criadoPor='" + criadoPor + "\n" +
+                ", AlteradoPor='" + AlteradoPor + "\n" +
+                '}' + "\n";
     }
 }

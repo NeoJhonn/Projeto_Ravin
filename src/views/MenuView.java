@@ -1,10 +1,7 @@
 package views;
 
 import controllers.*;
-import models.Cardapio;
-import models.Cliente;
-import models.Funcionario;
-import models.Produto;
+import models.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,37 +13,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static views.CardapioView.*;
 import static views.ClienteView.*;
 import static views.FuncionarioView.*;
+import static views.MesaView.*;
+import static views.PedidoView.*;
 import static views.ProdutoView.*;
 
 public class MenuView extends JFrame {
-
-    public static  String montarMenuPrincipal() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("=========================RAVIN========================= \n");
-        builder.append("1 - Funcionário \n");
-        builder.append("2 - Cliente \n");
-        builder.append("3 - Produto \n");
-        builder.append("4 - Cardapio \n");
-        builder.append("5 - Mesa \n");
-        builder.append("6 - Pedido \n");
-        builder.append("7 - Sair \n");
-
-        return builder.toString();
-    }
-
-    public static String montarSubMenuGeral(String modulo) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("========================Gestão de ");
-        builder.append(modulo);
-        builder.append("======================== \n");
-        builder.append("1 - Cadastrar \n");
-        builder.append("2 - Alterar \n");
-        builder.append("3 - Excluir \n");
-        builder.append("4 - Consultar \n");
-        builder.append("5 - Listar todos \n");
-
-        return builder.toString();
-    }
 
     public static void menuPrincipalRavin(FuncionarioController funcionarioController, ClienteController clienteController, ProdutoController produtoController, CardapioController cardapioController, MesaController mesaController, PedidoController pedidoController, ComandaController comandaController, AtomicInteger idDinamico) {
         JFrame frame = new JFrame();
@@ -66,6 +37,7 @@ public class MenuView extends JFrame {
 
         String[] options = {"Funcionário", "Cliente", "Produto", "Cardápio", "Mesa", "Pedido"};
 
+        // Montar a toolbar com os dropdowns
         for (String option : options) {
             JButton button = new JButton(option);
             JPopupMenu popupMenu = new JPopupMenu();
@@ -73,6 +45,8 @@ public class MenuView extends JFrame {
             dropdownCliente(options, option, popupMenu, button, toolbar, idDinamico, clienteController);
             dropdownProduto(options, option, popupMenu, button, toolbar, idDinamico, produtoController);
             dropdownCardapio(options, option, popupMenu, button, toolbar, idDinamico, cardapioController, produtoController);
+            dropdownMesa(options, option, popupMenu, button, toolbar, idDinamico, mesaController, comandaController, funcionarioController, clienteController);
+            dropdownPedido(options, option, popupMenu, button, toolbar, idDinamico, pedidoController, comandaController, produtoController, pedidoController, clienteController, funcionarioController);
         }
 
         frame.add(toolbar, BorderLayout.NORTH);
@@ -401,6 +375,227 @@ public class MenuView extends JFrame {
                     // Listar todos
                     List<Cardapio> cardapios = controller.listarTodos();
                     listarCardapios(cardapios, produtoController);
+                }
+            });
+        }
+    }
+
+    public static void dropdownMesa(String[] options, String option, JPopupMenu popupMenu, JButton button, JToolBar toolbar, AtomicInteger idDinamico, MesaController controller, ComandaController comandaController, FuncionarioController funcionarioController, ClienteController clienteController) {
+        if(option == options[4]) {
+            JMenuItem item1 = new JMenuItem("Cadastrar");
+            JMenuItem item2 = new JMenuItem("Alterar");
+            JMenuItem item3 = new JMenuItem("Excluir");
+            JMenuItem item4 = new JMenuItem("Consultar");
+            JMenuItem item5 = new JMenuItem("Listar Todas");
+            JMenuItem item6 = new JMenuItem("Mesas Disponíveis");
+            JMenuItem item7 = new JMenuItem("Reservar Mesa");
+            JMenuItem item8 = new JMenuItem("Listar Mesas Por Status");
+            popupMenu.add(item1);
+            popupMenu.add(item2);
+            popupMenu.add(item3);
+            popupMenu.add(item4);
+            popupMenu.add(item5);
+            popupMenu.add(item6);
+            popupMenu.add(item7);
+            popupMenu.add(item8);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    popupMenu.show(button, 0, button.getHeight());
+                }
+            });
+            toolbar.add(button);
+
+
+            item1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Adicionar Mesa
+                    Mesa mesa = MesaView.adicionarMesa(idDinamico, funcionarioController, comandaController);
+
+                    try {
+                        controller.cadastrar(mesa);
+                    } catch (Exception f) {
+                        JOptionPane.showMessageDialog(null, f.getMessage());
+                    }
+                }
+            });
+
+            item2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Alterar Mesa
+                    List<Mesa> mesas = controller.listarTodos();
+                    int idMesaAlterar = mostrarMenuIdAlterarMesa(mesas);
+                    Mesa mesaALterar = controller.consultar(idMesaAlterar);
+
+                    mostrarMenuAlterarMesa(mesaALterar, funcionarioController, comandaController);
+                }
+            });
+
+            item3.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Excluir Mesa
+                    List<Mesa> mesas = controller.listarTodos();
+                    int id = mostrarMenuExcluirMesa(mesas);
+                    controller.excluir(id);
+                }
+            });
+
+            item4.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Consultar Mesa
+                    List<Mesa> mesas = controller.listarTodos();
+                    int id = mostrarMenuConsultarMesa(mesas);
+                    Mesa mesaBuscada = controller.consultar(id);
+                    JOptionPane.showMessageDialog(null, mesaBuscada);
+                }
+            });
+
+            item5.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Listar todas
+                    List<Mesa> mesas = controller.listarTodos();
+                    listarMesas(mesas, controller);
+                }
+            });
+
+            item6.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Consultar Mesas Disponíveis
+                    listarMesasDidponiveis(controller);
+                }
+            });
+
+            item7.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Reservar Mesa
+                    mostrarMenuReservarMesa(controller, clienteController);
+                }
+            });
+
+            item8.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Listar Mesas Por Status
+                    listarMesasPorEstatus(controller);
+                }
+            });
+        }
+    }
+
+    public static void dropdownPedido(String[] options, String option, JPopupMenu popupMenu, JButton button, JToolBar toolbar, AtomicInteger idDinamico, PedidoController controller, ComandaController comandaController, ProdutoController produtoController, PedidoController pedidoControllerController, ClienteController clienteController, FuncionarioController funcionarioController) {
+        if(option == options[5]) {
+            JMenuItem item1 = new JMenuItem("Realizar pedido");
+            JMenuItem item2 = new JMenuItem("Alterar Pedido");
+            JMenuItem item3 = new JMenuItem("Cancelar Pedido");
+            JMenuItem item4 = new JMenuItem("Consultar");
+            JMenuItem item5 = new JMenuItem("Listar Todos");
+            JMenuItem item6 = new JMenuItem("Consultar Status do pedido");
+            JMenuItem item7 = new JMenuItem("Listar Comandas Por Status");
+            JMenuItem item8 = new JMenuItem("Fechar Comanda");
+            popupMenu.add(item1);
+            popupMenu.add(item2);
+            popupMenu.add(item3);
+            popupMenu.add(item4);
+            popupMenu.add(item5);
+            popupMenu.add(item6);
+            popupMenu.add(item7);
+            popupMenu.add(item8);
+
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    popupMenu.show(button, 0, button.getHeight());
+                }
+            });
+            toolbar.add(button);
+
+
+            item1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Realizar pedido
+                    Pedido pedido = PedidoView.adicionarPedido(idDinamico, produtoController);
+
+                    try {
+                        controller.cadastrar(pedido);
+                    } catch (Exception f) {
+                        JOptionPane.showMessageDialog(null, f.getMessage());
+                    }
+                }
+            });
+
+            item2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Alterar Pedido
+                    List<Pedido> pedidos = controller.listarTodos();
+                    int idPedidoAlterar = mostrarMenuIdAlterarPedido(pedidos);
+                    Pedido pedidoALterar = controller.consultar(idPedidoAlterar);
+
+                    mostrarMenuAlterarPedido(pedidoALterar, produtoController);
+                }
+            });
+
+            item3.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Cancelar Pedido
+                    List<Pedido> pedidos = controller.listarTodos();
+                    int id = mostrarMenuExcluirPedido(pedidos);
+                    controller.excluir(id);
+                }
+            });
+
+            item4.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Consultar Pedido
+                    List<Pedido> pedidos = controller.listarTodos();
+                    int id = mostrarMenuConsultarPedido(pedidos);
+                    Pedido pedidoBuscado = controller.consultar(id);
+                    JOptionPane.showMessageDialog(null, pedidoBuscado);
+                }
+            });
+
+            item5.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Listar todos Pedidos
+                    List<Pedido> pedidos = controller.listarTodos();
+                    listarPedidos(pedidos);
+                }
+            });
+
+            item6.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Consultar Status do pedido
+
+
+                }
+            });
+
+            item7.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Listar Comandas Por Status
+
+
+                }
+            });
+
+            item8.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Fechar Comanda
+
                 }
             });
         }

@@ -21,48 +21,8 @@ public class Main extends JFrame {
     private static AtomicInteger idCounter = new AtomicInteger();
 
     public static void main(String[] args) {
+        // Iniciar janela de gerenciamento do restaurante
         menuPrincipalRavin(funcionarioController,clienteController, produtoController, cardapioController, mesaController, pedidoController, comandaController, idCounter);
 
-
-
-        //Menu
-        boolean executando = true;
-        int opcaoSelecionado = 0;
-
-        while (executando) {
-            opcaoSelecionado = Integer.parseInt(JOptionPane.showInputDialog(MenuView.montarMenuPrincipal()));
-
-            switch (opcaoSelecionado) {
-                case 1:
-
-                    int opcao =0;
-                    break;
-                case 2:
-
-                    break;
-                case 3:
-                    break;
-                case 4:
-
-                    break;
-                case 5:
-                    opcao = 0;
-                    // Chamar menu mesa
-                    opcao = Integer.parseInt(JOptionPane.showInputDialog(null, MesaView.montarMenuMesas()));
-                    MesaView.operacaoMesa(opcao, mesaController, funcionarioController, idCounter);
-                    break;
-                case 6:
-                    // Chamar menu pedido
-                    opcao = Integer.parseInt(JOptionPane.showInputDialog(null, ComandaView.montarMenuPedidos()));
-                    ComandaView.operacaoPedido(opcao, pedidoController, idCounter);
-                    break;
-                case 7:
-                    executando = false;
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(null, "Digite uma opção válida!");
-                    break;
-            }
-        }
     }
 }

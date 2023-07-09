@@ -1,5 +1,7 @@
 package controllers;
 
+import enums.StatusMesa;
+import models.Cliente;
 import models.Mesa;
 import repositories.MesaRepository;
 
@@ -39,5 +41,24 @@ public class MesaController {
     public List<Mesa> listarTodos() {
 
         return repository.listarTodos();
+    }
+
+    public void reservarMesa(Cliente cliente, Mesa mesa) {
+        if (!cliente.equals(null) && !mesa.equals(null)) {
+            mesa.setStatusMesa(StatusMesa.Reservada);
+            mesa.setCliente(cliente);
+        }
+    }
+
+    public List<Mesa> listarMesasDisponiveis() {
+        List<Mesa> mesasDisponiveis = repository.listarTodos().stream().filter(m -> m.getStatusMesa() == StatusMesa.Livre).toList();
+
+        return mesasDisponiveis;
+    }
+
+    public List<Mesa> listarMesasPorStatus(StatusMesa statusMesa) {
+        List<Mesa> mesasDisponiveis = repository.listarTodos().stream().filter(m -> m.getStatusMesa() == statusMesa).toList();
+
+        return mesasDisponiveis;
     }
 }

@@ -164,36 +164,6 @@ public class CardapioView {
         return  cardapioAlterar;
     }
 
-    public static void operacaoCardapio(int opcao, CardapioController cardapioController,ProdutoController produtoController, AtomicInteger idCounter) {
-
-        switch (opcao) {
-            case 1:
-                // Adicionar Cardapio
-                Cardapio cardapio = CardapioView.adicionarCardapio(idCounter);
-
-                try {
-                    cardapioController.cadastrar(cardapio);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage());
-                }
-                break;
-            case 2:
-                // Alterar Cardapio
-                break;
-            case 3:
-                // Excluir Cardapio
-                break;
-            case 4:
-                // Consultar Cardapio
-                break;
-            case 5:
-                // Listar Cardapios
-                break;
-            default:
-                break;
-        }
-    }
-
     public static int mostrarMenuIdAlterarCardapio(List<Cardapio> cardapios) {
         StringBuilder builder = new StringBuilder();
         builder.append(" ==================== Lista de Cardápios ==================== ");
