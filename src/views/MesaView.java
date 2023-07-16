@@ -176,6 +176,7 @@ public class MesaView {
 
         // setando dados da mesa nos campos
         comboBox1.setSelectedItem(mesaAlterar.getFuncionario().getNome());
+
         //List<String> comandas = new ArrayList<>();
         //comandas.add((String) comboBox2.getSelectedItem());
         textField4.setText(mesaAlterar.getNome());
@@ -270,7 +271,13 @@ public class MesaView {
         builder.append("\n");
 
         for (Mesa mesa : mesas) {
-            builder.append(mesa + "\n");
+            if (mesa.getFuncionario() == null) {
+                mesa.setFuncionario(new Funcionario());
+                builder.append(mesa + "\n");
+            }else {
+                builder.append(mesa + "\n");
+            }
+
         }
 
         // Crie um painel com um layout BorderLayout
@@ -304,6 +311,9 @@ public class MesaView {
         builder.append("\n");
 
         for (Mesa mesa : mesasDisponiveis) {
+            if (mesa.getFuncionario() == null){
+                mesa.setFuncionario(new Funcionario());
+            }
             builder.append(mesa + "\n");
         }
 

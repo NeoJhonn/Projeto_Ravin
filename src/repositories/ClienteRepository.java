@@ -1,5 +1,6 @@
 package repositories;
 
+import builders.Builder;
 import models.Cliente;
 import models.Funcionario;
 
@@ -16,7 +17,7 @@ public class ClienteRepository {
     }
 
     public void salvar(Cliente entidade) {
-        Cliente cliente = buscarPorId(entidade.getId());
+        Cliente cliente = (entidade != null) ? buscarPorId(entidade.getId()) : null;
 
         if(cliente == null) {
             clientes.add(entidade);

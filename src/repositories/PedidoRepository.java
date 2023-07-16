@@ -15,7 +15,7 @@ public class PedidoRepository {
     }
 
     public void salvar(Pedido entidade) {
-        Pedido pedido = buscarPorId(entidade.getId());
+        Pedido pedido = (entidade != null) ? buscarPorId(entidade.getId()) : null;
 
         if(pedido == null) {
             pedidos.add(entidade);
@@ -37,13 +37,13 @@ public class PedidoRepository {
     }
 
     public Pedido buscarPorId(int id) {
-        Pedido pedidoBuscada = null;
+        Pedido pedidoBuscado = null;
         for (Pedido pedido : pedidos) {
             if (pedido.getId() == id)
-                pedidoBuscada = pedido;
+                pedidoBuscado = pedido;
         }
 
-        return pedidoBuscada;
+        return pedidoBuscado;
     }
 
     public void deletarPeloId(Pedido pedido) {

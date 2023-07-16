@@ -15,7 +15,7 @@ public class ComandaRepository {
     }
 
     public void salvar(Comanda entidade) {
-        Comanda comanda = buscarPorId(entidade.getId());
+        Comanda comanda = (entidade != null) ? buscarPorId(entidade.getId()) : null;
 
         if(comanda == null) {
             comandas.add(entidade);

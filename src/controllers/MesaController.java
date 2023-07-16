@@ -1,5 +1,6 @@
 package controllers;
 
+import builders.Builder;
 import enums.StatusMesa;
 import models.Cliente;
 import models.Mesa;
@@ -14,6 +15,7 @@ public class MesaController {
     public MesaController() {
 
         repository = new MesaRepository();
+        Builder.seedMesas(repository.listarTodos());
     }
 
     public void cadastrar(Mesa entidade) {

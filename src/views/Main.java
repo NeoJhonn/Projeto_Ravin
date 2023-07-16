@@ -17,12 +17,13 @@ public class Main extends JFrame {
     private static MesaController mesaController = new MesaController();
     private static PedidoController pedidoController = new PedidoController();
     private static ComandaController comandaController = new ComandaController();
-    // Contador para os ID
+    // Contador para os IDs
     private static AtomicInteger idCounter = new AtomicInteger();
 
     public static void main(String[] args) {
         // Iniciar janela de gerenciamento do restaurante
-        menuPrincipalRavin(funcionarioController,clienteController, produtoController, cardapioController, mesaController, pedidoController, comandaController, idCounter);
+        menuPrincipalRavin(funcionarioController, clienteController, produtoController, cardapioController,
+                mesaController, pedidoController, comandaController, idCounter);
 
     }
 }

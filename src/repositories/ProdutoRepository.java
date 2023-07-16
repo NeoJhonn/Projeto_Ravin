@@ -1,6 +1,7 @@
 package repositories;
 
 
+import builders.Builder;
 import models.Produto;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class ProdutoRepository {
     }
 
     public void salvar(Produto entidade) {
-        Produto produto = buscarPorId(entidade.getId());
+        Produto produto = (entidade != null) ? buscarPorId(entidade.getId()) : null;
 
         if(produto == null) {
             produtos.add(entidade);

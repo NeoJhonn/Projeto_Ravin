@@ -1,5 +1,6 @@
 package controllers;
 
+import builders.Builder;
 import enums.CategoriaCardapio;
 import enums.TipoProduto;
 import models.Produto;
@@ -15,6 +16,7 @@ public class ProdutoController {
     public ProdutoController() {
 
         repository = new ProdutoRepository();
+        Builder.seedProdutos(repository.listarTodos());
     }
 
     public void cadastrar(Produto entidade) {

@@ -46,7 +46,7 @@ public class MenuView extends JFrame {
             dropdownProduto(options, option, popupMenu, button, toolbar, idDinamico, produtoController);
             dropdownCardapio(options, option, popupMenu, button, toolbar, idDinamico, cardapioController, produtoController);
             dropdownMesa(options, option, popupMenu, button, toolbar, idDinamico, mesaController, comandaController, funcionarioController, clienteController);
-            dropdownPedido(options, option, popupMenu, button, toolbar, idDinamico, pedidoController, comandaController, produtoController, pedidoController, clienteController, funcionarioController);
+            dropdownPedido(options, option, popupMenu, button, toolbar, idDinamico, pedidoController, comandaController, produtoController, pedidoController, clienteController, funcionarioController, mesaController);
         }
 
         frame.add(toolbar, BorderLayout.NORTH);
@@ -82,6 +82,7 @@ public class MenuView extends JFrame {
                         // Adicionar Funcionario
                         Funcionario funcionario = adicionarFuncionario(idDinamico);
 
+                        if (funcionario != null)
                         try {
                             controller.cadastrar(funcionario);
                         } catch (Exception f) {
@@ -170,6 +171,7 @@ public class MenuView extends JFrame {
                     // Adicionar Cliente
                     Cliente cliente = adicionarCliente(idDinamico);
 
+                    if (cliente != null)
                     try {
                         controller.cadastrar(cliente);
                     } catch (Exception f) {
@@ -249,6 +251,7 @@ public class MenuView extends JFrame {
                     // Adicionar Produto
                     Produto produto = adicionarProduto(idDinamico);
 
+                    if (produto != null)
                     try {
                         controller.cadastrar(produto);
                     } catch (Exception f) {
@@ -328,6 +331,7 @@ public class MenuView extends JFrame {
                     // Adicionar Cardapio
                     Cardapio cardapio = CardapioView.adicionarCardapio(idDinamico);
 
+                    if (cardapio != null)
                     try {
                         controller.cadastrar(cardapio);
                     } catch (Exception f) {
@@ -413,6 +417,7 @@ public class MenuView extends JFrame {
                     // Adicionar Mesa
                     Mesa mesa = MesaView.adicionarMesa(idDinamico, funcionarioController, comandaController);
 
+                    if (mesa != null)
                     try {
                         controller.cadastrar(mesa);
                     } catch (Exception f) {
@@ -489,7 +494,7 @@ public class MenuView extends JFrame {
         }
     }
 
-    public static void dropdownPedido(String[] options, String option, JPopupMenu popupMenu, JButton button, JToolBar toolbar, AtomicInteger idDinamico, PedidoController controller, ComandaController comandaController, ProdutoController produtoController, PedidoController pedidoControllerController, ClienteController clienteController, FuncionarioController funcionarioController) {
+    public static void dropdownPedido(String[] options, String option, JPopupMenu popupMenu, JButton button, JToolBar toolbar, AtomicInteger idDinamico, PedidoController controller, ComandaController comandaController, ProdutoController produtoController, PedidoController pedidoControllerController, ClienteController clienteController, FuncionarioController funcionarioController, MesaController mesaController) {
         if(option == options[5]) {
             JMenuItem item1 = new JMenuItem("Realizar pedido");
             JMenuItem item2 = new JMenuItem("Alterar Pedido");
@@ -521,8 +526,9 @@ public class MenuView extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Realizar pedido
-                    Pedido pedido = PedidoView.adicionarPedido(idDinamico, produtoController);
+                    Pedido pedido = PedidoView.adicionarPedido(idDinamico, funcionarioController, clienteController, produtoController, mesaController);
 
+                    if (pedido != null)
                     try {
                         controller.cadastrar(pedido);
                     } catch (Exception f) {
@@ -536,10 +542,14 @@ public class MenuView extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     // Alterar Pedido
                     List<Pedido> pedidos = controller.listarTodos();
-                    int idPedidoAlterar = mostrarMenuIdAlterarPedido(pedidos);
-                    Pedido pedidoALterar = controller.consultar(idPedidoAlterar);
 
-                    mostrarMenuAlterarPedido(pedidoALterar, produtoController);
+                    if (mostrarMenuIdAlterarPedido(pedidos) != null) {
+
+                        String idPedidoAlterar = mostrarMenuIdAlterarPedido(pedidos);
+                        Pedido pedidoALterar = controller.consultar(Integer.parseInt(idPedidoAlterar));
+
+                        mostrarMenuAlterarPedido(pedidoALterar, produtoController);
+                    }
                 }
             });
 

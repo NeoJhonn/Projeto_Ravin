@@ -17,7 +17,7 @@ public class CardapioRepository {
 
 
     public void salvar(Cardapio entidade) {
-        Cardapio cardapio = buscarPorId(entidade.getId());
+        Cardapio cardapio = (entidade != null) ? buscarPorId(entidade.getId()) : null;
 
         if(cardapio == null) {
             cardapios.add(entidade);

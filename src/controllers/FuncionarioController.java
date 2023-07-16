@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import builders.Builder;
 import enums.*;
 import models.*;
 import util.*;
@@ -16,9 +17,11 @@ public class FuncionarioController {
 	public FuncionarioController() {
 
 		repository = new FuncionarioRepository();
+		Builder.seedFuncionarios(repository.listarTodos());
 	}
 
 	public void cadastrar(Funcionario entidade) throws Exception {
+		if(entidade != null)
 		if (UtilitarioData.getIdade(entidade.getDataNascimento()) < 18) {
 			throw new Exception("Não pode salvar o funcionario, pois ele é menor de idade");
 		}
@@ -50,7 +53,7 @@ public class FuncionarioController {
 
 	public List<Funcionario> listarGarconsDisponiveis() {
 		List<Funcionario> funcionarios = repository.listarTodos();
-		List<Funcionario> funcionarioDisponiveis = new ArrayList<>();
+		List<Funcionario> funcionarioDisponiveis = new ArrayList<Funcionario>();
 
 		for (Funcionario funcionario : funcionarios) {
 			if (funcionario.getDisponibilidade().equals(Disponibilidade.DISPONIVEL)

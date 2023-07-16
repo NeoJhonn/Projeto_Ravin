@@ -1,5 +1,6 @@
 package controllers;
 
+import builders.Builder;
 import models.Cliente;
 import models.Funcionario;
 import repositories.ClienteRepository;
@@ -14,10 +15,12 @@ public class ClienteController {
     public ClienteController() {
 
         repository = new ClienteRepository();
+        Builder.seedClientes(repository.listarTodos());
     }
 
     public void cadastrar(Cliente entidade) throws Exception {
-        if (UtilitarioData.getIdade(entidade.getDataNascimento()) < 18) {
+        if(entidade != null)
+        if (entidade.getDataNascimento()!=null && UtilitarioData.getIdade(entidade.getDataNascimento()) < 18) {
             throw new Exception("Não pode salvar o cliente, pois ele é menor de idade");
         }
         repository.salvar(entidade);

@@ -1,5 +1,7 @@
 package repositories;
 
+import builders.Builder;
+import models.Funcionario;
 import models.Mesa;
 
 import java.util.ArrayList;
@@ -12,10 +14,11 @@ public class MesaRepository {
     public MesaRepository() {
 
         mesas = new ArrayList<Mesa>();
+
     }
 
     public void salvar(Mesa entidade) {
-        Mesa mesa = buscarPorId(entidade.getId());
+        Mesa mesa = (entidade != null) ? buscarPorId(entidade.getId()) : null;
 
         if(mesa == null) {
             mesas.add(entidade);
@@ -39,8 +42,13 @@ public class MesaRepository {
     public Mesa buscarPorId(int id) {
         Mesa mesaBuscada = null;
         for (Mesa mesa : mesas) {
-            if (mesa.getId() == id)
+            if (mesa.getId() == id) {
                 mesaBuscada = mesa;
+                if (mesaBuscada.getFuncionario() == null){
+                    mesaBuscada.setFuncionario(new Funcionario());
+                }
+            }
+
         }
 
         return mesaBuscada;

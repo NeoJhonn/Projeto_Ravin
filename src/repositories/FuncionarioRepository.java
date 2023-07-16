@@ -3,7 +3,7 @@ package repositories;
 import java.util.ArrayList;
 import java.util.List;
 
-import builders.FuncionariosBuilder;
+import builders.Builder;
 import models.Funcionario;
 
 public class FuncionarioRepository {
@@ -12,12 +12,11 @@ public class FuncionarioRepository {
 
 	public FuncionarioRepository() {
 
-		//funcionarios = new ArrayList<Funcionario>();
-		funcionarios = FuncionariosBuilder.getFuncionarios();
+		funcionarios = new ArrayList<Funcionario>();
 	}
 
 	public void salvar(Funcionario entidade) {
-		Funcionario funcionario = buscarPorId(entidade.getId());
+		Funcionario funcionario = (entidade != null) ? buscarPorId(entidade.getId()) : null;
 		
 		if(funcionario == null) {
 			funcionarios.add(entidade);
@@ -31,7 +30,7 @@ public class FuncionarioRepository {
 	}
 
 	public List<Funcionario> listarTodos() {
-		return funcionarios;
+		return this.funcionarios;
 	}
 
 	public void excluir(Funcionario entidade) {
