@@ -20,7 +20,7 @@ public class PedidoView {
         Pedido pedido = null;
 
         // Verificando se existe funcionários, clientes, produtos e mesas cadastradas
-        if (!funcionarioController.listarGarconsDisponiveis().isEmpty() && !clienteController.listarTodos().isEmpty() &&
+        if (!funcionarioController.listarTodos().isEmpty() && !clienteController.listarTodos().isEmpty() &&
                 !produtoController.listarTodos().isEmpty() && !mesaController.listarMesasDisponiveis().isEmpty()) {
 
             //adiciona um id dinâmico
@@ -30,26 +30,26 @@ public class PedidoView {
             JPanel panel = new JPanel(new GridLayout(8, 2));
 
             // Create labels and components for each input field
+            JLabel label1 = new JLabel("Selecione o Cliente:");
+            String[] clientes = new String[clienteController.listarTodos().size()];
+            for (int i=0; i < clientes.length; i++) {
+                clientes[i] = clienteController.listarTodos().get(i).getNome();
+            }
+            JComboBox<String> comboBox1 = new JComboBox<>(clientes);
+
             JLabel label2 = new JLabel("Produto:");
             String[] produtos = new String[produtoController.listarTodos().size()];
             for (int i = 0; i < produtos.length; i++) {
                 produtos[i] = produtoController.listarTodos().get(i).getNome();
             }
-            JComboBox<String> comboBox1 = new JComboBox<>(produtos);
-
-
-            JLabel label3 = new JLabel("Data e Hora de Solicitação:");
-            JTextField textField3 = new JTextField(10);
-
-            JLabel label4 = new JLabel("Data e Hora de Início de Preparo:");
-            JTextField textField4 = new JTextField(10);
+            JComboBox<String> comboBox2 = new JComboBox<>(produtos);
 
             JLabel label5 = new JLabel("Tempo de Preparo Restante:");
             JTextField textField5 = new JTextField(10);
 
             JLabel label6 = new JLabel("Status de Preparo:");
             StatusPreparo[] status = StatusPreparo.values();
-            JComboBox<StatusPreparo> comboBox2 = new JComboBox<>(status);
+            JComboBox<StatusPreparo> comboBox3 = new JComboBox<>(status);
 
 
             JLabel label7 = new JLabel("Observação:");
@@ -59,16 +59,14 @@ public class PedidoView {
             JTextField textField8 = new JTextField(10);
 
             // Add labels and components to the panel
-            panel.add(label2);
+            panel.add(label1);
             panel.add(comboBox1);
-            panel.add(label3);
-            panel.add(textField3);
-            panel.add(label4);
-            panel.add(textField4);
+            panel.add(label2);
+            panel.add(comboBox2);
             panel.add(label5);
             panel.add(textField5);
             panel.add(label6);
-            panel.add(comboBox2);
+            panel.add(comboBox3);
             panel.add(label7);
             panel.add(textField7);
             panel.add(label8);
@@ -84,18 +82,30 @@ public class PedidoView {
             // Check if the user clicked "OK" (option == 0)
             if (option == JOptionPane.OK_OPTION) {
                 // Retrieve the values entered in the text fields and combo boxes
-                Produto produto = produtoController.listarTodos().stream().filter(p -> p.getNome() == comboBox1.getSelectedItem()).findFirst().orElse(null);
+                Produto produto = produtoController.listarTodos().stream().filter(p -> p.getNome() == comboBox2.getSelectedItem()).findFirst().orElse(null);
+                int clienteId = clienteController.listarTodos().stream().filter((c -> c.getNome() == comboBox1.getSelectedItem())).findFirst().orElse(null).getId();
+
                 //Timestamp dataHoraSolicitacao = Timestamp.valueOf(textField3.getText());
                 //Timestamp dataHoraInicioPreparo = Timestamp.valueOf(textField4.getText());
                 //Timestamp tempoPreparoRestante = Timestamp.valueOf(textField5.getText());
-                StatusPreparo statusPreparo = (StatusPreparo) comboBox2.getSelectedItem();
+                StatusPreparo statusPreparo = (StatusPreparo) comboBox3.getSelectedItem();
                 String observacao = textField7.getText();
-                int quantidade = Integer.parseInt(textField8.getText());
+
+                int quantidade = 0;
+                try {
+                    quantidade = Integer.parseInt(textField8.getText());
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null,
+                            "Digite uma Quantidade válida", null, JOptionPane.ERROR_MESSAGE);
+                    adicionarPedido(idDinamico, funcionarioController, clienteController, produtoController, mesaController);
+                }
+
 
                 //Criar objeto Pedido
                 pedido = new Pedido(
                         id,
                         produto,
+                        clienteId,
                         new Timestamp(System.currentTimeMillis()),
                         new Timestamp(System.currentTimeMillis()),
                         new Timestamp(System.currentTimeMillis()),
@@ -116,93 +126,91 @@ public class PedidoView {
         return pedido;
     }
 
-    public static Pedido mostrarMenuAlterarPedido(Pedido pedidoAlterar, ProdutoController produtoController) {
-        // Create a panel with GridLayout for the input fields
-        JPanel panel = new JPanel(new GridLayout(8, 2));
+    public static Pedido mostrarMenuAlterarPedido(Pedido pedidoAlterar, ProdutoController produtoController, ClienteController clienteController) {
+            // Create a panel with GridLayout for the input fields
+            JPanel panel = new JPanel(new GridLayout(8, 2));
 
-        // Create labels and components for each input field
-        JLabel label2 = new JLabel("Produto:");
-        String[] produtos = new String[produtoController.listarTodos().size()];
-        for (int i=0; i < produtos.length; i++) {
-            produtos[i] = produtoController.listarTodos().get(i).getNome();
-        }
-        JComboBox<String> comboBox1 = new JComboBox<>(produtos);
+            // Create labels and components for each input field
+            JLabel label1 = new JLabel("Cliente:");
+            String[] clientes = new String[1];
+            for (int i=0; i < clientes.length; i++) {
+                clientes[i] = clienteController.listarTodos().stream().filter(c -> c.getId() == pedidoAlterar.getClienteId()).findFirst().orElse(null).getNome();
+            }
+            JComboBox<String> comboBox1 = new JComboBox<>(clientes);
 
+            JLabel label2 = new JLabel("Produto:");
+            String[] produtos = new String[produtoController.listarTodos().size()];
+            for (int i = 0; i < produtos.length; i++) {
+                produtos[i] = produtoController.listarTodos().get(i).getNome();
+            }
+            JComboBox<String> comboBox2 = new JComboBox<>(produtos);
 
+            JLabel label5 = new JLabel("Tempo de Preparo Restante:");
+            JTextField textField5 = new JTextField(10);
 
-        JLabel label3 = new JLabel("Data e Hora de Solicitação:");
-        JTextField textField3 = new JTextField(10);
-
-        JLabel label4 = new JLabel("Data e Hora de Início de Preparo:");
-        JTextField textField4 = new JTextField(10);
-
-        JLabel label5 = new JLabel("Tempo de Preparo Restante:");
-        JTextField textField5 = new JTextField(10);
-
-        JLabel label6 = new JLabel("Status de Preparo:");
-        StatusPreparo[] status = StatusPreparo.values();
-        JComboBox<StatusPreparo> comboBox2 = new JComboBox<>(status);
-
+            JLabel label6 = new JLabel("Status de Preparo:");
+            StatusPreparo[] status = StatusPreparo.values();
+            JComboBox<StatusPreparo> comboBox3 = new JComboBox<>(status);
 
 
-        JLabel label7 = new JLabel("Observação:");
-        JTextField textField7 = new JTextField(10);
+            JLabel label7 = new JLabel("Observação:");
+            JTextField textField7 = new JTextField(10);
 
-        JLabel label8 = new JLabel("Quantidade:");
-        JTextField textField8 = new JTextField(10);
+            JLabel label8 = new JLabel("Quantidade:");
+            JTextField textField8 = new JTextField(10);
 
-        // Add labels and components to the panel
-        panel.add(label2);
-        panel.add(comboBox1);
-        panel.add(label3);
-        panel.add(textField3);
-        panel.add(label4);
-        panel.add(textField4);
-        panel.add(label5);
-        panel.add(textField5);
-        panel.add(label6);
-        panel.add(comboBox2);
-        panel.add(label7);
-        panel.add(textField7);
-        panel.add(label8);
-        panel.add(textField8);
+            // Add labels and components to the panel
+            panel.add(label1);
+            panel.add(comboBox1);
+            panel.add(label2);
+            panel.add(comboBox2);
+            panel.add(label5);
+            panel.add(textField5);
+            panel.add(label6);
+            panel.add(comboBox3);
+            panel.add(label7);
+            panel.add(textField7);
+            panel.add(label8);
+            panel.add(textField8);
 
-        // Settando os dados do Pedido nos campos
+            // Display the input dialog
+            int option = JOptionPane.showOptionDialog(null, panel, "Atualizar Pedido", JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, null, null);
+
+            //
 
 
-        // Display the input dialog
-        int option = JOptionPane.showOptionDialog(null, panel, "Criar Pedido", JOptionPane.OK_CANCEL_OPTION,
-                JOptionPane.QUESTION_MESSAGE, null, null, null);
+            // Check if the user clicked "OK" (option == 0)
+            if (option == JOptionPane.OK_OPTION) {
+                // Retrieve the values entered in the text fields and combo boxes
+                Produto produto = produtoController.listarTodos().stream().filter(p -> p.getNome() == comboBox2.getSelectedItem()).findFirst().orElse(null);
 
-        //
-        Pedido pedido = null;
 
-        // Check if the user clicked "OK" (option == 0)
-        if (option == JOptionPane.OK_OPTION) {
-            // Retrieve the values entered in the text fields and combo boxes
-            Produto produto = produtoController.listarTodos().stream().filter(p -> p.getNome() == comboBox1.getSelectedItem()).findFirst().orElse(null);
-            //Timestamp dataHoraSolicitacao = Timestamp.valueOf(textField3.getText());
-            //Timestamp dataHoraInicioPreparo = Timestamp.valueOf(textField4.getText());
-            //Timestamp tempoPreparoRestante = Timestamp.valueOf(textField5.getText());
-            StatusPreparo statusPreparo = (StatusPreparo) comboBox2.getSelectedItem();
-            String observacao = textField7.getText();
-            int quantidade = Integer.parseInt(textField8.getText());
+                //Timestamp dataHoraSolicitacao = Timestamp.valueOf(textField3.getText());
+                //Timestamp dataHoraInicioPreparo = Timestamp.valueOf(textField4.getText());
+                //Timestamp tempoPreparoRestante = Timestamp.valueOf(textField5.getText());
+                StatusPreparo statusPreparo = (StatusPreparo) comboBox3.getSelectedItem();
+                String observacao = textField7.getText();
 
-            //Criar objeto Pedido
-            //pedido = new Pedido(
-                   // id,
-                   // produto,
-                   // new Timestamp(System.currentTimeMillis()),
-                   // new Timestamp(System.currentTimeMillis()),
-                   // new Timestamp(System.currentTimeMillis()),
-                   // statusPreparo,
-                   // observacao,
-                   // quantidade,
-                   // new Timestamp(System.currentTimeMillis()),
-                   // new Timestamp(System.currentTimeMillis()),
-                   // "admin",
-                    //"admin"
-        }
+
+
+                //Criar objeto Pedido
+                        //new Pedido(
+                        //id,
+                        //produto,
+                        //0,
+                        //new Timestamp(System.currentTimeMillis()),
+                        //new Timestamp(System.currentTimeMillis()),
+                        //new Timestamp(System.currentTimeMillis()),
+                        //statusPreparo,
+                        //observacao,
+                        //0,
+                        //new Timestamp(System.currentTimeMillis()),
+                        //new Timestamp(System.currentTimeMillis()),
+                        //"admin",
+                        //"admin"
+                //);
+            }
 
         return  pedidoAlterar;
     }

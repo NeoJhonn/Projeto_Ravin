@@ -480,7 +480,7 @@ public class MenuView extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Reservar Mesa
-                    mostrarMenuReservarMesa(controller, clienteController);
+                    mostrarMenuReservarMesa(controller, clienteController, funcionarioController);
                 }
             });
 
@@ -543,12 +543,12 @@ public class MenuView extends JFrame {
                     // Alterar Pedido
                     List<Pedido> pedidos = controller.listarTodos();
 
-                    if (mostrarMenuIdAlterarPedido(pedidos) != null) {
+                    if (pedidos != null) {
 
                         String idPedidoAlterar = mostrarMenuIdAlterarPedido(pedidos);
                         Pedido pedidoALterar = controller.consultar(Integer.parseInt(idPedidoAlterar));
 
-                        mostrarMenuAlterarPedido(pedidoALterar, produtoController);
+                        mostrarMenuAlterarPedido(pedidoALterar, produtoController, clienteController);
                     }
                 }
             });

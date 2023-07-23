@@ -1,8 +1,10 @@
 package controllers;
 
 import builders.Builder;
+import enums.Disponibilidade;
 import enums.StatusMesa;
 import models.Cliente;
+import models.Funcionario;
 import models.Mesa;
 import repositories.MesaRepository;
 
@@ -45,10 +47,12 @@ public class MesaController {
         return repository.listarTodos();
     }
 
-    public void reservarMesa(Cliente cliente, Mesa mesa) {
-        if (!cliente.equals(null) && !mesa.equals(null)) {
+    public void reservarMesa(Cliente cliente, Mesa mesa, Funcionario garcom) {
+        if (!cliente.equals(null) && !mesa.equals(null) && !garcom.equals(null)) {
             mesa.setStatusMesa(StatusMesa.Reservada);
             mesa.setCliente(cliente);
+            garcom.setDisponibilidade(Disponibilidade.OCUPADO);
+            mesa.setFuncionario(garcom);
         }
     }
 

@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 public class Pedido {
     private int id;
     private Produto produto;
+    private int clienteId;
     private Timestamp dataHoraSolicitacao;
     private Timestamp dataHoraInicioPreparo;
     private Timestamp tempoPreparoRestante;
@@ -23,9 +24,10 @@ public class Pedido {
 
     }
 
-    public Pedido(int id, Produto produto, Timestamp dataHoraSolicitacao, Timestamp dataHoraInicioPreparo, Timestamp tempoPreparoRestante, StatusPreparo statusPreparo, String observacao, int quantidade, Timestamp criadoEM, Timestamp alteradoEM, String criadoPor, String alteradoPor) {
+    public Pedido(int id, Produto produto, int clienteId, Timestamp dataHoraSolicitacao, Timestamp dataHoraInicioPreparo, Timestamp tempoPreparoRestante, StatusPreparo statusPreparo, String observacao, int quantidade, Timestamp criadoEM, Timestamp alteradoEM, String criadoPor, String alteradoPor) {
         this.id = id;
         this.produto = produto;
+        this.clienteId = clienteId;
         this.dataHoraSolicitacao = dataHoraSolicitacao;
         this.dataHoraInicioPreparo = dataHoraInicioPreparo;
         this.tempoPreparoRestante = tempoPreparoRestante;
@@ -134,21 +136,31 @@ public class Pedido {
         AlteradoPor = alteradoPor;
     }
 
+    public int getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(int clienteId) {
+        this.clienteId = clienteId;
+    }
+
     @Override
     public String toString() {
-        return "Pedido{" +
-                "id=" + id +
-                ", produto=" + produto +
-                ", dataHoraSolicitacao=" + dataHoraSolicitacao +
-                ", dataHoraInicioPreparo=" + dataHoraInicioPreparo +
-                ", tempoPreparoRestante=" + tempoPreparoRestante +
-                ", statusPreparo=" + statusPreparo +
-                ", observacao='" + observacao + '\'' +
-                ", quantidade=" + quantidade +
-                ", criadoEM=" + criadoEM +
-                ", alteradoEM=" + alteradoEM +
-                ", criadoPor='" + criadoPor + '\'' +
-                ", AlteradoPor='" + AlteradoPor + '\'' +
-                '}';
+        String nomeProduto = produto.getNome();
+        return "Pedido{" + "\n" +
+                "id=" + id + "\n" +
+                ", produto=" + nomeProduto + "\n" +
+                ", clienteId=" + clienteId + "\n" +
+                ", dataHoraSolicitacao=" + dataHoraSolicitacao + "\n" +
+                ", dataHoraInicioPreparo=" + dataHoraInicioPreparo + "\n" +
+                ", tempoPreparoRestante=" + tempoPreparoRestante + "\n" +
+                ", statusPreparo=" + statusPreparo + "\n" +
+                ", observacao='" + observacao + "\n" +
+                ", quantidade=" + quantidade + "\n" +
+                ", criadoEM=" + criadoEM + "\n" +
+                ", alteradoEM=" + alteradoEM + "\n" +
+                ", criadoPor='" + criadoPor + "\n" +
+                ", AlteradoPor='" + AlteradoPor + "\n" +
+                '}'+ "\n";
     }
 }

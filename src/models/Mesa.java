@@ -168,6 +168,7 @@ public class Mesa {
         return "Mesa{" + "\n" +
                 "id=" + id + "\n" +
                 ", funcionario=" + funcionario.getNome() + "\n" +
+                ", Reservada Para=" + cliente.getNome() + "\n" +
                 ", comandas=" + comandas + "\n" +
                 ", nome='" + nome + "\n" +
                 ", codigo='" + codigo + "\n" +

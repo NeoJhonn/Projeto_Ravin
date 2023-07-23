@@ -30,22 +30,6 @@ public class MesaView {
         // Create a panel with GridLayout for the input fields
         JPanel panel = new JPanel(new GridLayout(8, 2));
 
-        // Create labels and components for each input field
-        JLabel label2 = new JLabel("Funcionário:");
-        String[] funcionarios = new String[funcionarioController.listarGarconsDisponiveis().size()];
-        for (int i=0; i < funcionarios.length; i++) {
-            funcionarios[i] = funcionarioController.listarGarconsDisponiveis().get(i).getNome();
-        }
-        JComboBox<String> comboBox1 = new JComboBox<>(funcionarios);
-
-
-        JLabel label3 = new JLabel("Comandas:");
-        String[] comandas = new String[comandaController.listarTodos().size()];
-        for (int i=0; i < comandas.length; i++) {
-            comandas[i] = String.valueOf(comandaController.listarTodos().get(i).getId());
-        }
-        JComboBox<String> comboBox2 = new JComboBox<>(comandas);
-
         JLabel label4 = new JLabel("Nome:");
         JTextField textField4 = new JTextField(10);
 
@@ -64,10 +48,6 @@ public class MesaView {
 
 
         // Add labels and components to the panel
-        panel.add(label2);
-        panel.add(comboBox1);
-        panel.add(label3);
-        panel.add(comboBox2);
         panel.add(label4);
         panel.add(textField4);
         panel.add(label5);
@@ -89,21 +69,16 @@ public class MesaView {
         // Check if the user clicked "OK" (option == 0)
         if (option == JOptionPane.OK_OPTION) {
             // Retrieve the values entered in the text fields and combo boxes
-            String funcionarioNome = (String) comboBox1.getSelectedItem();
-            List<String> comandasList = new ArrayList<>();
-            comandasList.add((String) comboBox2.getSelectedItem());
             String nome = textField4.getText();
             String codigo = textField5.getText();
             int numero = Integer.parseInt(textField6.getText());
             int quantidadeMaximaPessoas = Integer.parseInt(textField7.getText());
             StatusMesa statusMesa = (StatusMesa) comboBox3.getSelectedItem();
 
-            Funcionario funcionario = funcionarioController.listarGarconsDisponiveis().stream().filter(f -> f.getNome() == funcionarioNome).findFirst().orElse(null);
-
             // Criar Mesa
             mesa = new Mesa(
                     id,
-                    funcionario,
+                    null,
                     null,
                     nome,
                     codigo,
@@ -271,8 +246,9 @@ public class MesaView {
         builder.append("\n");
 
         for (Mesa mesa : mesas) {
-            if (mesa.getFuncionario() == null) {
+            if (mesa.getFuncionario() == null && mesa.getCliente() == null) {
                 mesa.setFuncionario(new Funcionario());
+                mesa.setCliente(new Cliente());
                 builder.append(mesa + "\n");
             }else {
                 builder.append(mesa + "\n");
@@ -311,8 +287,9 @@ public class MesaView {
         builder.append("\n");
 
         for (Mesa mesa : mesasDisponiveis) {
-            if (mesa.getFuncionario() == null){
+            if (mesa.getFuncionario() == null && mesa.getCliente() == null){
                 mesa.setFuncionario(new Funcionario());
+                mesa.setCliente(new Cliente());
             }
             builder.append(mesa + "\n");
         }
@@ -340,19 +317,27 @@ public class MesaView {
 
     }
 
-    public static void mostrarMenuReservarMesa(MesaController mesaController, ClienteController clienteController) {
+    public static void mostrarMenuReservarMesa(MesaController mesaController, ClienteController clienteController, FuncionarioController funcionarioController) {
         List<Mesa> mesasDisponiveis = mesaController.listarMesasDisponiveis();
 
         // Create a panel with GridLayout for the input fields
         JPanel panel = new JPanel(new GridLayout(8, 2));
 
         // Create labels and components for each input field
-        JLabel label2 = new JLabel("Cliente:");
+        JLabel label1 = new JLabel("Cliente:");
         String[] clientes = new String[clienteController.listarTodos().size()];
         for (int i=0; i < clientes.length; i++) {
             clientes[i] = clienteController.listarTodos().get(i).getNome();
         }
         JComboBox<String> comboBox1 = new JComboBox<>(clientes);
+
+        // Create labels and components for each input field
+        JLabel label2 = new JLabel("Funcionário:");
+        String[] funcionarios = new String[funcionarioController.listarGarconsDisponiveis().size()];
+        for (int i=0; i < funcionarios.length; i++) {
+            funcionarios[i] = funcionarioController.listarGarconsDisponiveis().get(i).getNome();
+        }
+        JComboBox<String> comboBox2 = new JComboBox<>(funcionarios);
 
 
         JLabel label3 = new JLabel("Mesas Disponíveis:");
@@ -360,13 +345,15 @@ public class MesaView {
         for (int i=0; i < mesasIds.length; i++) {
             mesasIds[i] = String.valueOf(mesasDisponiveis.get(i).getId());
         }
-        JComboBox<String> comboBox2 = new JComboBox<>(mesasIds);
+        JComboBox<String> comboBox3 = new JComboBox<>(mesasIds);
 
         // Add labels and components to the panel
-        panel.add(label2);
+        panel.add(label1);
         panel.add(comboBox1);
-        panel.add(label3);
+        panel.add(label2);
         panel.add(comboBox2);
+        panel.add(label3);
+        panel.add(comboBox3);
 
         // Display the input dialog
         int option = JOptionPane.showOptionDialog(null, panel, "Reserva de Mesa", JOptionPane.OK_CANCEL_OPTION,
@@ -375,9 +362,29 @@ public class MesaView {
         // Check if the user clicked "OK" (option == 0)
         if (option == JOptionPane.OK_OPTION) {
             Cliente cliente = clienteController.listarTodos().stream().filter(c -> c.getNome() == comboBox1.getSelectedItem()).findFirst().orElse(null);
-            int mesaId = Integer.parseInt(String.valueOf(comboBox2.getSelectedItem()));
-            Mesa mesa = mesasDisponiveis.stream().filter(m -> m.getId() == mesaId).findFirst().orElse(null);;
-            mesaController.reservarMesa(cliente, mesa);
+            int mesaId = Integer.parseInt(String.valueOf(comboBox3.getSelectedItem()));
+            Mesa mesa = mesasDisponiveis.stream().filter(m -> m.getId() == mesaId).findFirst().orElse(null);
+            Funcionario garcom = funcionarioController.listarGarconsDisponiveis().stream().filter(g -> g.getNome() == comboBox2.getSelectedItem()).findFirst().orElse(null);
+
+            boolean mesaReservada = false;
+            for (Mesa mes: mesaController.listarTodos()) {
+                if (mes.getCliente() != null && cliente.getNome() == mes.getCliente().getNome()) {
+                    mesaReservada = true;
+                }
+            }
+            // verificar se já uma reserva para o cliente selecionado
+            if (mesaReservada) {
+                JOptionPane.showMessageDialog(null, "Já uma reserva de mesa para este Cliente!");
+            } else {
+                // Verificar se há lugares disponíveis antes de reservar a mesa
+                if (mesa.getQuantidadeMaximaPessoas() >= 1) {
+                    int qtdPessoas = mesa.getQuantidadeMaximaPessoas();
+                    mesaController.reservarMesa(cliente, mesa, garcom);
+                    mesa.setQuantidadeMaximaPessoas(qtdPessoas--);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Limite máximo de pessoas por mesa atingido, escolha outra mesa!");
+                }
+            }
         }
     }
 
@@ -409,7 +416,13 @@ public class MesaView {
                 builder.append("\n");
 
                 for (Mesa mesa : mesasDisponiveis) {
-                    builder.append(mesa + "\n");
+                    if (mesa.getFuncionario() == null && mesa.getCliente() == null) {
+                        mesa.setFuncionario(new Funcionario());
+                        mesa.setCliente(new Cliente());
+                        builder.append(mesa + "\n");
+                    } else {
+                        builder.append(mesa + "\n");
+                    }
                 }
 
                 // Setar lista de cardápios no textArea

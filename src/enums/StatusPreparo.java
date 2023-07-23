@@ -1,8 +1,8 @@
 package enums;
 
 public enum StatusPreparo {
-    Pronto,
     Preparando,
+    Pronto,
     Aguardando,
     Corfirmado
 }
