@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PedidoView {
 
-    public static Pedido adicionarPedido(AtomicInteger idDinamico, FuncionarioController funcionarioController, ClienteController clienteController, ProdutoController produtoController, MesaController mesaController) {
+    public static Pedido adicionarPedido(AtomicInteger idDinamico, FuncionarioController funcionarioController, ClienteController clienteController, ProdutoController produtoController, MesaController mesaController, PedidoController pedidoController) {
         Pedido pedido = null;
 
         // Verificando se existe funcionários, clientes, produtos e mesas cadastradas
@@ -97,7 +97,7 @@ public class PedidoView {
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null,
                             "Digite uma Quantidade válida", null, JOptionPane.ERROR_MESSAGE);
-                    adicionarPedido(idDinamico, funcionarioController, clienteController, produtoController, mesaController);
+                    adicionarPedido(idDinamico, funcionarioController, clienteController, produtoController, mesaController, pedidoController);
                 }
 
 
@@ -133,9 +133,7 @@ public class PedidoView {
             // Create labels and components for each input field
             JLabel label1 = new JLabel("Cliente:");
             String[] clientes = new String[1];
-            for (int i=0; i < clientes.length; i++) {
-                clientes[i] = clienteController.listarTodos().stream().filter(c -> c.getId() == pedidoAlterar.getClienteId()).findFirst().orElse(null).getNome();
-            }
+            clientes[0] = clienteController.listarTodos().stream().filter(c -> c.getId() == pedidoAlterar.getClienteId()).findFirst().orElse(null).getNome();
             JComboBox<String> comboBox1 = new JComboBox<>(clientes);
 
             JLabel label2 = new JLabel("Produto:");
@@ -173,6 +171,13 @@ public class PedidoView {
             panel.add(label8);
             panel.add(textField8);
 
+            // Settar valores
+            comboBox2.setSelectedItem(pedidoAlterar.getProduto().getNome());
+            textField5.setText(String.valueOf(pedidoAlterar.getTempoPreparoRestante()));
+            comboBox3.setSelectedItem(pedidoAlterar.getStatusPreparo());
+            textField7.setText(pedidoAlterar.getObservacao());
+            textField8.setText(String.valueOf(pedidoAlterar.getQuantidade()));
+
             // Display the input dialog
             int option = JOptionPane.showOptionDialog(null, panel, "Atualizar Pedido", JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE, null, null, null);
@@ -184,32 +189,11 @@ public class PedidoView {
             if (option == JOptionPane.OK_OPTION) {
                 // Retrieve the values entered in the text fields and combo boxes
                 Produto produto = produtoController.listarTodos().stream().filter(p -> p.getNome() == comboBox2.getSelectedItem()).findFirst().orElse(null);
-
-
-                //Timestamp dataHoraSolicitacao = Timestamp.valueOf(textField3.getText());
-                //Timestamp dataHoraInicioPreparo = Timestamp.valueOf(textField4.getText());
-                //Timestamp tempoPreparoRestante = Timestamp.valueOf(textField5.getText());
-                StatusPreparo statusPreparo = (StatusPreparo) comboBox3.getSelectedItem();
-                String observacao = textField7.getText();
-
-
-
-                //Criar objeto Pedido
-                        //new Pedido(
-                        //id,
-                        //produto,
-                        //0,
-                        //new Timestamp(System.currentTimeMillis()),
-                        //new Timestamp(System.currentTimeMillis()),
-                        //new Timestamp(System.currentTimeMillis()),
-                        //statusPreparo,
-                        //observacao,
-                        //0,
-                        //new Timestamp(System.currentTimeMillis()),
-                        //new Timestamp(System.currentTimeMillis()),
-                        //"admin",
-                        //"admin"
-                //);
+                pedidoAlterar.setProduto(produto);
+                pedidoAlterar.setTempoPreparoRestante(Timestamp.valueOf(textField5.getText()));
+                pedidoAlterar.setStatusPreparo((StatusPreparo) comboBox3.getSelectedItem());
+                pedidoAlterar.setObservacao(textField7.getText());
+                pedidoAlterar.setQuantidade(Integer.parseInt(textField8.getText()));
             }
 
         return  pedidoAlterar;

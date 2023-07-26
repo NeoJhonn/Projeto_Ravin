@@ -21,7 +21,7 @@ public class Builder {
     public static void seedClientes(List<Cliente> clientes) {
         clientes.add(new Cliente(999, "Cliente 1", "845465456", "afdsfadsfas", "456455644564", HandleDates.criarDataAniverssario("03-01-1999"), true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim", "", true));
         clientes.add(new Cliente(998, "Cliente 2", "45645644", "afdsfadsfas", "456455644564", HandleDates.criarDataAniverssario("04-02-1998"), true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim", "", false));
-        clientes.add(new Cliente(999, "Cliente 3", "4564564564", "afdsfadsfas", "456455644564", HandleDates.criarDataAniverssario("03-01-1999"), true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim", "", true));
+        clientes.add(new Cliente(997, "Cliente 3", "4564564564", "afdsfadsfas", "456455644564", HandleDates.criarDataAniverssario("03-01-1999"), true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim", "", true));
     }
 
     public static void seedProdutos(List<Produto> produtos) {
@@ -34,9 +34,9 @@ public class Builder {
     }
 
     public static void seedMesas(List<Mesa> mesas) {
-        mesas.add(new Mesa(799, null, null, "Mesa 1", "001", 1, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
-        mesas.add(new Mesa(798, null, null, "Mesa 2", "002", 2, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
-        mesas.add(new Mesa(797, null, null, "Mesa 3", "003", 3, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
-        mesas.add(new Mesa(796, null, null, "Mesa 4", "004", 4, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
+        mesas.add(new Mesa(799, null, "Mesa 1", "001", 1, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
+        mesas.add(new Mesa(798, null, "Mesa 2", "002", 2, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
+        mesas.add(new Mesa(797, null, "Mesa 3", "003", 3, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
+        mesas.add(new Mesa(796, null, "Mesa 4", "004", 4, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
     }
 }

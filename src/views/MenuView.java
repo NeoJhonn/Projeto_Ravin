@@ -526,11 +526,14 @@ public class MenuView extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Realizar pedido
-                    Pedido pedido = PedidoView.adicionarPedido(idDinamico, funcionarioController, clienteController, produtoController, mesaController);
+                    Pedido pedido = PedidoView.adicionarPedido(idDinamico, funcionarioController, clienteController, produtoController, mesaController, controller);
+
 
                     if (pedido != null)
                     try {
                         controller.cadastrar(pedido);
+                        comandaController.cadastrar(ComandaView.adicionarComanda(idDinamico, mesaController, pedido, controller, clienteController, comandaController));
+
                     } catch (Exception f) {
                         JOptionPane.showMessageDialog(null, f.getMessage());
                     }

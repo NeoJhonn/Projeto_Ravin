@@ -1,7 +1,7 @@
 package enums;
 
 public enum StatusComanda {
+    Em_Aberto,
     Paga,
-    Fechada,
-    Em_Aberto
+    Fechada
 }

@@ -1,6 +1,7 @@
 package repositories;
 
 import models.Comanda;
+import models.Pedido;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.List;
 public class ComandaRepository {
 
     private List<Comanda> comandas;
+
+
 
     public ComandaRepository() {
 
@@ -31,6 +34,7 @@ public class ComandaRepository {
     public List<Comanda> listarTodos() {
         return comandas;
     }
+
 
     public void excluir(Comanda entidade) {
         comandas.remove(entidade);

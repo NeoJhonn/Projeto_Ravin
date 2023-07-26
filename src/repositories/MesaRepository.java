@@ -23,8 +23,8 @@ public class MesaRepository {
         if(mesa == null) {
             mesas.add(entidade);
         } else {
-            // caso tenha um funcionário com o mesmo id da entidade passada como parâmetro
-            // atribuir variável entidade em funcionário para atualizar a referência
+            // caso tenha uma mesa com o mesmo id da entidade passada como parâmetro
+            // atribuir variável entidade em mesa para atualizar a referência
             // com as atualizações
             mesa = entidade;
         }
@@ -61,4 +61,6 @@ public class MesaRepository {
     public int contar() {
         return mesas.size();
     }
+
+
 }

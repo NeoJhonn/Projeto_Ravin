@@ -7,9 +7,9 @@ import java.util.List;
 
 public class Comanda {
     private int id;
-    private Mesa mesa;
-    private Cliente cliente;
-    private List<Pedido> pedidos;
+    private int mesaId;
+    private int clienteId;
+    private int pedidoId;
     private String codigo;
     private String observacoes;
     private StatusComanda statusComanda;
@@ -22,11 +22,11 @@ public class Comanda {
 
     }
 
-    public Comanda(int id, Mesa mesa, Cliente cliente, List<Pedido> pedidos, String codigo, String observacoes, StatusComanda statusComanda, Timestamp criadoEM, Timestamp alteradoEM, String criadoPor, String alteradoPor) {
+    public Comanda(int id, int mesaId, int clienteId, int pedidoId, String codigo, String observacoes, StatusComanda statusComanda, Timestamp criadoEM, Timestamp alteradoEM, String criadoPor, String alteradoPor) {
         this.id = id;
-        this.mesa = mesa;
-        this.cliente = cliente;
-        this.pedidos = pedidos;
+        this.mesaId = mesaId;
+        this.clienteId = clienteId;
+        this.pedidoId = pedidoId;
         this.codigo = codigo;
         this.observacoes = observacoes;
         this.statusComanda = statusComanda;
@@ -36,21 +36,6 @@ public class Comanda {
         AlteradoPor = alteradoPor;
     }
 
-    public void adicionarPedido(Pedido p) {
-        this.pedidos.add(p);
-    }
-
-    public void removerPedido(String codigo) {
-
-    }
-
-    public void fecharComanda(String codigo) {
-
-    }
-
-    public double calcularTotalComanda() {
-        return 0;
-    }
 
     public int getId() {
         return id;
@@ -60,28 +45,20 @@ public class Comanda {
         this.id = id;
     }
 
-    public Mesa getMesa() {
-        return mesa;
+    public int getClienteId() {
+        return clienteId;
     }
 
-    public void setMesa(Mesa mesa) {
-        this.mesa = mesa;
+    public void setClienteId(int clienteId) {
+        this.clienteId = clienteId;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public int getPedidoId() {
+        return pedidoId;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public List<Pedido> getPedidos() {
-        return pedidos;
-    }
-
-    public void setPedidos(List<Pedido> pedidos) {
-        this.pedidos = pedidos;
+    public void setPedidoId(int pedidoId) {
+        this.pedidoId = pedidoId;
     }
 
     public String getCodigo() {
@@ -138,5 +115,13 @@ public class Comanda {
 
     public void setAlteradoPor(String alteradoPor) {
         AlteradoPor = alteradoPor;
+    }
+
+    public int getMesaId() {
+        return mesaId;
+    }
+
+    public void setMesaId(int mesaId) {
+        this.mesaId = mesaId;
     }
 }

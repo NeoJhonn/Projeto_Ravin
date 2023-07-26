@@ -9,7 +9,6 @@ public class Mesa {
     private int id;
     private Funcionario funcionario;
     private Cliente cliente;
-    private List<Comanda> comandas;
     private String nome;
     private String codigo;
     private int numero;
@@ -24,10 +23,9 @@ public class Mesa {
 
     }
 
-    public Mesa(int id, Funcionario funcionario, List<Comanda> comandas, String nome, String codigo, int numero, int quantidadeMaximaPessoas, StatusMesa statusMesa, Timestamp criadoEM, Timestamp alteradoEM, String criadoPor, String alteradoPor) {
+    public Mesa(int id, Funcionario funcionario, String nome, String codigo, int numero, int quantidadeMaximaPessoas, StatusMesa statusMesa, Timestamp criadoEM, Timestamp alteradoEM, String criadoPor, String alteradoPor) {
         this.id = id;
         this.funcionario = funcionario;
-        this.comandas = comandas;
         this.nome = nome;
         this.codigo = codigo;
         this.numero = numero;
@@ -38,27 +36,7 @@ public class Mesa {
         this.criadoPor = criadoPor;
         AlteradoPor = alteradoPor;
     }
-
-    public boolean reservarMesa() {
-        return false;
-    }
-
-    public boolean liberarMesa() {
-        return false;
-    }
-
-    public boolean ocuparMesa(int quantidadePessoas) {
-        return false;
-    }
-
-    public void alocarFuncionario(Funcionario funcionario) {
-
-    }
-
-    public void adicionarComanda(Comanda comanda) {
-
-    }
-
+    
     public int getId() {
         return id;
     }
@@ -73,14 +51,6 @@ public class Mesa {
 
     public void setFuncionario(Funcionario funcionario) {
         this.funcionario = funcionario;
-    }
-
-    public List<Comanda> getComandas() {
-        return comandas;
-    }
-
-    public void setComandas(List<Comanda> comandas) {
-        this.comandas = comandas;
     }
 
     public String getNome() {
@@ -169,7 +139,6 @@ public class Mesa {
                 "id=" + id + "\n" +
                 ", funcionario=" + funcionario.getNome() + "\n" +
                 ", Reservada Para=" + cliente.getNome() + "\n" +
-                ", comandas=" + comandas + "\n" +
                 ", nome='" + nome + "\n" +
                 ", codigo='" + codigo + "\n" +
                 ", numero=" + numero + "\n" +
@@ -186,7 +155,6 @@ public class Mesa {
         return "Mesa{" + "\n" +
                 "id=" + id + "\n" +
                 ", Reservada para=" + cliente.getNome() + "\n" +
-                ", comandas=" + comandas + "\n" +
                 ", nome='" + nome + "\n" +
                 ", codigo='" + codigo + "\n" +
                 ", numero=" + numero + "\n" +

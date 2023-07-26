@@ -79,7 +79,6 @@ public class MesaView {
             mesa = new Mesa(
                     id,
                     null,
-                    null,
                     nome,
                     codigo,
                     numero,
