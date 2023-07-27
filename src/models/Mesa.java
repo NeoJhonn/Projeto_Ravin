@@ -23,9 +23,9 @@ public class Mesa {
 
     }
 
-    public Mesa(int id, Funcionario funcionario, String nome, String codigo, int numero, int quantidadeMaximaPessoas, StatusMesa statusMesa, Timestamp criadoEM, Timestamp alteradoEM, String criadoPor, String alteradoPor) {
+    public Mesa(int id, String nome, String codigo, int numero, int quantidadeMaximaPessoas, StatusMesa statusMesa, Timestamp criadoEM, Timestamp alteradoEM, String criadoPor, String alteradoPor) {
         this.id = id;
-        this.funcionario = funcionario;
+        this.funcionario = new Funcionario();
         this.nome = nome;
         this.codigo = codigo;
         this.numero = numero;
@@ -34,7 +34,8 @@ public class Mesa {
         this.criadoEM = criadoEM;
         this.alteradoEM = alteradoEM;
         this.criadoPor = criadoPor;
-        AlteradoPor = alteradoPor;
+        this.AlteradoPor = alteradoPor;
+        this.cliente = new Cliente();
     }
     
     public int getId() {
@@ -139,22 +140,6 @@ public class Mesa {
                 "id=" + id + "\n" +
                 ", funcionario=" + funcionario.getNome() + "\n" +
                 ", Reservada Para=" + cliente.getNome() + "\n" +
-                ", nome='" + nome + "\n" +
-                ", codigo='" + codigo + "\n" +
-                ", numero=" + numero + "\n" +
-                ", quantidadeMaximaPessoas=" + quantidadeMaximaPessoas + "\n" +
-                ", statusMesa=" + statusMesa + "\n" +
-                ", criadoEM=" + criadoEM + "\n" +
-                ", alteradoEM=" + alteradoEM + "\n" +
-                ", criadoPor='" + criadoPor + "\n" +
-                ", AlteradoPor='" + AlteradoPor + "\n" +
-                '}' + "\n";
-    }
-
-    public String toString(Cliente cliente) {
-        return "Mesa{" + "\n" +
-                "id=" + id + "\n" +
-                ", Reservada para=" + cliente.getNome() + "\n" +
                 ", nome='" + nome + "\n" +
                 ", codigo='" + codigo + "\n" +
                 ", numero=" + numero + "\n" +

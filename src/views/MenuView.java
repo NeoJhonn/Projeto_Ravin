@@ -494,7 +494,7 @@ public class MenuView extends JFrame {
         }
     }
 
-    public static void dropdownPedido(String[] options, String option, JPopupMenu popupMenu, JButton button, JToolBar toolbar, AtomicInteger idDinamico, PedidoController controller, ComandaController comandaController, ProdutoController produtoController, PedidoController pedidoControllerController, ClienteController clienteController, FuncionarioController funcionarioController, MesaController mesaController) {
+    public static void dropdownPedido(String[] options, String option, JPopupMenu popupMenu, JButton button, JToolBar toolbar, AtomicInteger idDinamico, PedidoController controller, ComandaController comandaController, ProdutoController produtoController, PedidoController pedidoController, ClienteController clienteController, FuncionarioController funcionarioController, MesaController mesaController) {
         if(option == options[5]) {
             JMenuItem item1 = new JMenuItem("Realizar pedido");
             JMenuItem item2 = new JMenuItem("Alterar Pedido");
@@ -590,6 +590,12 @@ public class MenuView extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Consultar Status do pedido
+                    try {
+                        int pedidoId = Integer.parseInt(mostrarMenuIdConsultarStatusPedido(controller.listarTodos()));
+                        mostrarStatusPedido(pedidoController.consultar(pedidoId), clienteController, comandaController, mesaController);
+                    } catch (Exception p) {
+
+                    }
 
 
                 }

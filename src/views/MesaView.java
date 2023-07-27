@@ -78,7 +78,6 @@ public class MesaView {
             // Criar Mesa
             mesa = new Mesa(
                     id,
-                    null,
                     nome,
                     codigo,
                     numero,

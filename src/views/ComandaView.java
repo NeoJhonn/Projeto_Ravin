@@ -99,6 +99,7 @@ public class ComandaView {
             mesa.setStatusMesa(StatusMesa.Ocupada);
 
 
+
             String codigo = textField5.getText();
             String observacoes = textField6.getText();
             StatusComanda statusComanda = (StatusComanda) comboBox4.getSelectedItem();
@@ -106,7 +107,12 @@ public class ComandaView {
             // verificar se é o mesmo cliente já tem uma comanda
             Comanda comandaCliente = comandaController.listarTodos().stream().filter(c -> c.getClienteId() == pedidoRecebido.getClienteId()).findFirst().orElse(null);
 
-            if (comandaCliente == null) {
+            if (comandaCliente == null && mesa.getQuantidadeMaximaPessoas() >= 1) {
+                // Verificar se há lugar disponível na mesa
+                int qtdPesoas = mesa.getQuantidadeMaximaPessoas();
+                qtdPesoas--;
+                mesa.setQuantidadeMaximaPessoas(qtdPesoas);
+
                 // Criar objeto Comanda
                 comanda = new Comanda(
                         id,

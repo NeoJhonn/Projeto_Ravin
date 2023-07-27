@@ -34,9 +34,9 @@ public class Builder {
     }
 
     public static void seedMesas(List<Mesa> mesas) {
-        mesas.add(new Mesa(799, null, "Mesa 1", "001", 1, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
-        mesas.add(new Mesa(798, null, "Mesa 2", "002", 2, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
-        mesas.add(new Mesa(797, null, "Mesa 3", "003", 3, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
-        mesas.add(new Mesa(796, null, "Mesa 4", "004", 4, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
+        mesas.add(new Mesa(799, "Mesa 1", "001", 1, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
+        mesas.add(new Mesa(798, "Mesa 2", "002", 2, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
+        mesas.add(new Mesa(797, "Mesa 3", "003", 3, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
+        mesas.add(new Mesa(796, "Mesa 4", "004", 4, 8, StatusMesa.Livre, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
     }
 }

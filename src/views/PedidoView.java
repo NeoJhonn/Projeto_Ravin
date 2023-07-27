@@ -3,10 +3,7 @@ package views;
 import controllers.*;
 import enums.StatusMesa;
 import enums.StatusPreparo;
-import models.Funcionario;
-import models.Mesa;
-import models.Pedido;
-import models.Produto;
+import models.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,6 +43,7 @@ public class PedidoView {
 
             JLabel label5 = new JLabel("Tempo de Preparo Restante:");
             JTextField textField5 = new JTextField(10);
+            textField5.setText(String.valueOf(new Timestamp(System.currentTimeMillis())));
 
             JLabel label6 = new JLabel("Status de Preparo:");
             StatusPreparo[] status = StatusPreparo.values();
@@ -108,7 +106,7 @@ public class PedidoView {
                         clienteId,
                         new Timestamp(System.currentTimeMillis()),
                         new Timestamp(System.currentTimeMillis()),
-                        new Timestamp(System.currentTimeMillis()),
+                        Timestamp.valueOf(textField5.getText()),
                         statusPreparo,
                         observacao,
                         quantidade,
@@ -275,5 +273,43 @@ public class PedidoView {
         JOptionPane.showOptionDialog(null, panel, "Pedidos Realizados:", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
 
+    }
+
+    public static String mostrarMenuIdConsultarStatusPedido(List<Pedido> pedidos) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(" ==================== Lista de Pedidos ==================== ");
+        builder.append("\n");
+
+        for (Pedido pedido: pedidos) {
+            builder.append("Id= " + pedido.getId());
+            builder.append("\n");
+        }
+
+        builder.append("Digite o id do Pedido que você deseja consultar o Status:");
+
+        return JOptionPane.showInputDialog(null, builder.toString());
+    }
+
+    public static void mostrarStatusPedido(Pedido pedido, ClienteController clienteController, ComandaController comandaController, MesaController mesaController) {
+        Cliente cliente = null;
+        Comanda comanda = null;
+        Mesa mesa = null;
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(" ==================== Status do Pedido ==================== ");
+        builder.append("\n");
+        builder.append("Id= " + pedido.getId());
+        comanda = comandaController.listarTodos().stream().filter(c -> c.getPedidoId() == pedido.getId()).findFirst().orElse(null);
+        mesa = mesaController.consultar(comanda.getMesaId());
+        builder.append(", Mesa= " + mesa.getNome());
+        cliente = clienteController.consultar(pedido.getClienteId());
+        builder.append(", Cliente= " + cliente.getNome());
+        builder.append(", Produto= " + pedido.getProduto().getNome());
+        builder.append(", Status do Pedido= " + pedido.getStatusPreparo());
+        builder.append("\n");
+
+
+
+        JOptionPane.showMessageDialog(null, builder.toString());
     }
 }
