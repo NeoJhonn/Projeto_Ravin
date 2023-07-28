@@ -1,8 +1,11 @@
 package controllers;
 
+import enums.StatusPreparo;
+import models.Cliente;
 import models.Pedido;
 import repositories.PedidoRepository;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 public class PedidoController {
@@ -15,7 +18,9 @@ public class PedidoController {
     }
 
     public void cadastrar(Pedido entidade) {
-        repository.salvar(entidade);
+        if (!entidade.equals(null)) {
+            repository.salvar(entidade);
+        }
     }
 
     public void alterar(Pedido entidade) {
@@ -39,5 +44,24 @@ public class PedidoController {
     public List<Pedido> listarTodos() {
 
         return repository.listarTodos();
+    }
+
+    public void alterarStatusPedido(Pedido pedido) {
+        if (new Timestamp(System.currentTimeMillis()).getTime() > pedido.getTempoPreparoRestante().getTime()){
+            pedido.setStatusPreparo(StatusPreparo.Pronto);
+        }
+    }
+
+    public double somarPedidosCliente(Cliente cliente) {
+        double total = 0;
+
+        for (Pedido pedido: repository.listarTodos()) {
+            if (pedido.getClienteId() == cliente.getId()) {
+                total += (pedido.getProduto().getPrecoVenda() * pedido.getQuantidade());
+            }
+        }
+
+
+        return total;
     }
 }

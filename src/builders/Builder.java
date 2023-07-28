@@ -27,10 +27,10 @@ public class Builder {
     public static void seedProdutos(List<Produto> produtos) {
         produtos.add(new Produto(899, "Coca-cola", "600ml", "001", 6, 10, "0", "", TipoProduto.Bebida, true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
         produtos.add(new Produto(898, "Skoll", "600ml", "002", 8, 15, "0", "contém glútem", TipoProduto.Bebida, true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
-        produtos.add(new Produto(897, "X-salada", "pão, hamburguer e salada", "003", 10, 18, "30min", "contém glútem", TipoProduto.Lanche, true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
-        produtos.add(new Produto(896, "Porção de Batatas Fritas", "500g de batata", "004", 12, 20, "30min", "contém glútem", TipoProduto.Lanche, true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
-        produtos.add(new Produto(895, "Pudim de leite", "leite,ovos e leite condençado", "005", 13, 25, "60min", "contém lactose", TipoProduto.Sobremesa, true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
-        produtos.add(new Produto(894, "petit gateau", "uma bola de sorvete, bolo de chocalate com calda quente", "006", 20, 35, "60min", "contém glútem", TipoProduto.Sobremesa, true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
+        produtos.add(new Produto(897, "X-salada", "pão, hamburguer e salada", "003", 10, 18, "2", "contém glútem", TipoProduto.Lanche, true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
+        produtos.add(new Produto(896, "Porção de Batatas Fritas", "500g de batata", "004", 12, 20, "30", "contém glútem", TipoProduto.Lanche, true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
+        produtos.add(new Produto(895, "Pudim de leite", "leite,ovos e leite condençado", "005", 13, 25, "60", "contém lactose", TipoProduto.Sobremesa, true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
+        produtos.add(new Produto(894, "petit gateau", "uma bola de sorvete, bolo de chocalate com calda quente", "006", 20, 35, "60", "contém glútem", TipoProduto.Sobremesa, true, new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()), "admim", "admim"));
     }
 
     public static void seedMesas(List<Mesa> mesas) {

@@ -1,6 +1,9 @@
 package controllers;
 
+import enums.StatusComanda;
+import models.Cliente;
 import models.Comanda;
+import models.Mesa;
 import models.Pedido;
 import repositories.ComandaRepository;
 
@@ -17,7 +20,9 @@ public class ComandaController {
     }
 
     public void cadastrar(Comanda entidade) {
-        repository.salvar(entidade);
+        if (!entidade.equals(null)) {
+            repository.salvar(entidade);
+        }
     }
 
     public void alterar(Comanda entidade) {
@@ -42,5 +47,52 @@ public class ComandaController {
 
         return repository.listarTodos();
     }
+
+    public List<Comanda> listarComandasPorEstatus(StatusComanda status) {
+        List<Comanda> comandasPorStatus = repository.listarTodos().stream()
+                .filter(c -> c.getStatusComanda() == status).toList();
+
+        return comandasPorStatus;
+    }
+
+    public String fecharComanda(Cliente cliente, PedidoController pedidoController, MesaController mesaController) {
+        Comanda comanda = listarTodos().stream().filter(c -> c.getClienteId() == cliente.getId()).findFirst().orElse(null);
+        Mesa mesa = mesaController.consultar(comanda.getMesaId());
+
+        int quantidade = 1;
+
+        StringBuilder builder = new StringBuilder();
+        builder.append(" ==================== Ravin Restaurante LTDA ==================== "+"\n");
+        builder.append("  "+"\n");
+        builder.append("Cliente: "+cliente.getNome()+" - Mesa: "+ mesa.getNome() + " - Comanda: " + comanda.getCodigo() +"\n");
+        builder.append(" ======================= Items Consumidos ======================="+"\n");
+
+
+
+            for (Pedido pedido: pedidoController.listarTodos()) {
+                if (builder.toString().contains(pedido.getProduto().getNome())) {
+                    quantidade++;
+                }
+                if (comanda.getClienteId() == pedido.getClienteId()) {
+                    builder.append("QTD: "+ pedido.getQuantidade()+ " - Item: " + pedido.getProduto().getNome() +" --->  Valor Unitário: R$ " + pedido.getProduto().getPrecoVenda() +"\n");
+                }
+
+
+            }
+
+        builder.append(" ================================================================" + "\n");
+        builder.append("Total(R$): " + pedidoController.somarPedidosCliente(cliente) + "0");
+
+
+        return builder.toString();
+    }
+
+    public String pagarComanda() {
+
+
+        return "";
+    }
+
+
 
 }

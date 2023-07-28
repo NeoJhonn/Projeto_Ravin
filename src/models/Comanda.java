@@ -9,7 +9,6 @@ public class Comanda {
     private int id;
     private int mesaId;
     private int clienteId;
-    private int pedidoId;
     private String codigo;
     private String observacoes;
     private StatusComanda statusComanda;
@@ -22,11 +21,10 @@ public class Comanda {
 
     }
 
-    public Comanda(int id, int mesaId, int clienteId, int pedidoId, String codigo, String observacoes, StatusComanda statusComanda, Timestamp criadoEM, Timestamp alteradoEM, String criadoPor, String alteradoPor) {
+    public Comanda(int id, int mesaId, int clienteId, String codigo, String observacoes, StatusComanda statusComanda, Timestamp criadoEM, Timestamp alteradoEM, String criadoPor, String alteradoPor) {
         this.id = id;
         this.mesaId = mesaId;
         this.clienteId = clienteId;
-        this.pedidoId = pedidoId;
         this.codigo = codigo;
         this.observacoes = observacoes;
         this.statusComanda = statusComanda;
@@ -51,14 +49,6 @@ public class Comanda {
 
     public void setClienteId(int clienteId) {
         this.clienteId = clienteId;
-    }
-
-    public int getPedidoId() {
-        return pedidoId;
-    }
-
-    public void setPedidoId(int pedidoId) {
-        this.pedidoId = pedidoId;
     }
 
     public String getCodigo() {
@@ -123,5 +113,21 @@ public class Comanda {
 
     public void setMesaId(int mesaId) {
         this.mesaId = mesaId;
+    }
+
+    @Override
+    public String toString() {
+        return "Comanda{" + "\n" +
+                "id=" + id + "\n" +
+                ", mesaId=" + mesaId + "\n" +
+                ", clienteId=" + clienteId + "\n" +
+                ", codigo='" + codigo + "\n" +
+                ", observacoes='" + observacoes + "\n" +
+                ", statusComanda=" + statusComanda + "\n" +
+                ", criadoEM=" + criadoEM + "\n" +
+                ", alteradoEM=" + alteradoEM + "\n" +
+                ", criadoPor='" + criadoPor + "\n" +
+                ", AlteradoPor='" + AlteradoPor + "\n" +
+                '}' + "\n" ;
     }
 }

@@ -7,13 +7,15 @@ import models.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PedidoView {
 
-    public static Pedido adicionarPedido(AtomicInteger idDinamico, FuncionarioController funcionarioController, ClienteController clienteController, ProdutoController produtoController, MesaController mesaController, PedidoController pedidoController) {
+    public static Pedido adicionarPedido(AtomicInteger idDinamico, FuncionarioController funcionarioController, ClienteController clienteController, ProdutoController produtoController, MesaController mesaController) {
         Pedido pedido = null;
 
         // Verificando se existe funcionários, clientes, produtos e mesas cadastradas
@@ -35,15 +37,24 @@ public class PedidoView {
             JComboBox<String> comboBox1 = new JComboBox<>(clientes);
 
             JLabel label2 = new JLabel("Produto:");
-            String[] produtos = new String[produtoController.listarTodos().size()];
-            for (int i = 0; i < produtos.length; i++) {
-                produtos[i] = produtoController.listarTodos().get(i).getNome();
+            JComboBox<String> comboBox2 = new JComboBox<>();
+            JLabel label5 = new JLabel("Tempo de Preparo(em minutos):");
+            JTextField tempoPreparoField = new JTextField(10);
+            tempoPreparoField.setEditable(false);
+            for (int i = 0; i < produtoController.listarTodos().size(); i++) {
+                comboBox2.addItem(produtoController.listarTodos().get(i).getNome());
             }
-            JComboBox<String> comboBox2 = new JComboBox<>(produtos);
+            Produto produtoSelecionado = produtoController.listarTodos().stream().filter(p -> p.getNome() == comboBox2.getSelectedItem()).findFirst().orElse(null);
+            tempoPreparoField.setText(produtoSelecionado.getTempoPreparo());
+            comboBox2.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Produto produtoSelecionado = produtoController.listarTodos().stream().filter(p -> p.getNome() == comboBox2.getSelectedItem()).findFirst().orElse(null);
+                    tempoPreparoField.setText(produtoSelecionado.getTempoPreparo());
+                }
+            });
 
-            JLabel label5 = new JLabel("Tempo de Preparo Restante:");
-            JTextField textField5 = new JTextField(10);
-            textField5.setText(String.valueOf(new Timestamp(System.currentTimeMillis())));
+
 
             JLabel label6 = new JLabel("Status de Preparo:");
             StatusPreparo[] status = StatusPreparo.values();
@@ -62,7 +73,7 @@ public class PedidoView {
             panel.add(label2);
             panel.add(comboBox2);
             panel.add(label5);
-            panel.add(textField5);
+            panel.add(tempoPreparoField);
             panel.add(label6);
             panel.add(comboBox3);
             panel.add(label7);
@@ -85,7 +96,7 @@ public class PedidoView {
 
                 //Timestamp dataHoraSolicitacao = Timestamp.valueOf(textField3.getText());
                 //Timestamp dataHoraInicioPreparo = Timestamp.valueOf(textField4.getText());
-                //Timestamp tempoPreparoRestante = Timestamp.valueOf(textField5.getText());
+                long tempoPreparo = Long.parseLong(tempoPreparoField.getText());
                 StatusPreparo statusPreparo = (StatusPreparo) comboBox3.getSelectedItem();
                 String observacao = textField7.getText();
 
@@ -95,7 +106,7 @@ public class PedidoView {
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null,
                             "Digite uma Quantidade válida", null, JOptionPane.ERROR_MESSAGE);
-                    adicionarPedido(idDinamico, funcionarioController, clienteController, produtoController, mesaController, pedidoController);
+                    adicionarPedido(idDinamico, funcionarioController, clienteController, produtoController, mesaController);
                 }
 
 
@@ -106,7 +117,7 @@ public class PedidoView {
                         clienteId,
                         new Timestamp(System.currentTimeMillis()),
                         new Timestamp(System.currentTimeMillis()),
-                        Timestamp.valueOf(textField5.getText()),
+                        new Timestamp(System.currentTimeMillis() + tempoPreparo * 60 * 1000),//adiciona o tempo de preparo
                         statusPreparo,
                         observacao,
                         quantidade,
@@ -290,16 +301,18 @@ public class PedidoView {
         return JOptionPane.showInputDialog(null, builder.toString());
     }
 
-    public static void mostrarStatusPedido(Pedido pedido, ClienteController clienteController, ComandaController comandaController, MesaController mesaController) {
+    public static void mostrarStatusPedido(Pedido pedido,PedidoController pedidoController, ClienteController clienteController, ComandaController comandaController, MesaController mesaController) {
         Cliente cliente = null;
         Comanda comanda = null;
         Mesa mesa = null;
+        // Verificar se o pedido esta pronto
+         pedidoController.alterarStatusPedido(pedido);
 
         StringBuilder builder = new StringBuilder();
         builder.append(" ==================== Status do Pedido ==================== ");
         builder.append("\n");
         builder.append("Id= " + pedido.getId());
-        comanda = comandaController.listarTodos().stream().filter(c -> c.getPedidoId() == pedido.getId()).findFirst().orElse(null);
+        comanda = comandaController.listarTodos().stream().filter(c -> c.getClienteId() == pedido.getClienteId()).findFirst().orElse(null);
         mesa = mesaController.consultar(comanda.getMesaId());
         builder.append(", Mesa= " + mesa.getNome());
         cliente = clienteController.consultar(pedido.getClienteId());

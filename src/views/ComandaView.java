@@ -9,6 +9,8 @@ import models.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
@@ -62,10 +64,6 @@ public class ComandaView {
         comboBox3.addItem(pedido.getProduto().getNome());
 
 
-
-        JLabel label5 = new JLabel("Código:");
-        JTextField textField5 = new JTextField(10);
-
         JLabel label6 = new JLabel("Observações:");
         JTextField textField6 = new JTextField(10);
 
@@ -79,15 +77,13 @@ public class ComandaView {
         panel.add(comboBox2);
         panel.add(label4);
         panel.add(comboBox3);
-        panel.add(label5);
-        panel.add(textField5);
         panel.add(label6);
         panel.add(textField6);
         panel.add(label7);
         panel.add(comboBox4);
 
         // Display the input dialog
-        int option = JOptionPane.showOptionDialog(null, panel, "Criar Comanda do Cliente", JOptionPane.OK_CANCEL_OPTION,
+        int option = JOptionPane.showOptionDialog(null, panel, "Adcionar Pedido a uma Comanda", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.QUESTION_MESSAGE, null, null, null);
 
 
@@ -99,8 +95,6 @@ public class ComandaView {
             mesa.setStatusMesa(StatusMesa.Ocupada);
 
 
-
-            String codigo = textField5.getText();
             String observacoes = textField6.getText();
             StatusComanda statusComanda = (StatusComanda) comboBox4.getSelectedItem();
 
@@ -118,8 +112,7 @@ public class ComandaView {
                         id,
                         mesa.getId(),
                         pedidoRecebido.getClienteId(),
-                        pedido.getId(),
-                        codigo,
+                        "00"+id,
                         observacoes,
                         statusComanda,
                         new Timestamp(System.currentTimeMillis()),
@@ -132,6 +125,150 @@ public class ComandaView {
             }
         }
         return comanda;
+    }
+
+    public static void listarComandasPorStatus(ComandaController comandaController) {
+        // Crie um painel com um layout BorderLayout
+        JPanel panel = new JPanel(new BorderLayout());
+
+        // Criar um comboBox do status
+        StatusComanda[] status = StatusComanda.values();
+        JComboBox<StatusComanda> comboBox = new JComboBox<>(status);
+
+        // Crie a área de texto
+        JTextArea textArea = new JTextArea(10, 45);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+
+        // Adicione elementos ao painel
+        panel.add(comboBox, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        //Adicionar um evento de clique ao comboBox
+        comboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Pegando o status do comboBox e listando as Comandas
+                List<Comanda> comandas = comandaController.listarComandasPorEstatus((StatusComanda) comboBox.getSelectedItem());
+                StringBuilder builder = new StringBuilder();
+
+                builder.append(" ==================== Comandas Disponíveis por status ==================== ");
+                builder.append("\n");
+
+                for (Comanda comanda : comandas) {
+                    builder.append(comanda + "\n");
+                }
+
+                // Setar lista de comandas no textArea
+                textArea.setText(builder.toString());
+            }
+        });
+
+        // Exiba o diálogo de entrada
+        JOptionPane.showOptionDialog(null, panel, "Listar Comandas Por Status:",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+    }
+
+    public static void fecharComandaCliente(ComandaController comandaController, ClienteController clienteController, PedidoController pedidoController, MesaController mesaController) {
+        JFrame frame = new JFrame("Exemplo de InputDialog");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(500, 500);
+
+        JDialog dialog = new JDialog(frame, "Comanda", true);
+        dialog.setSize(500, 500); // Aumentei o tamanho da janela para acomodar o JTextArea maior
+        dialog.setLocationRelativeTo(frame);
+
+
+        JComboBox<String> clienteComboBox = new JComboBox<>();
+        for (Comanda comanda: comandaController.listarTodos()) {
+            clienteComboBox.addItem(String.valueOf(comanda.getClienteId()));
+        }
+
+
+        JLabel clienteLabel = new JLabel("Selecione o Cliente");
+
+        JTextArea comandaTextArea = new JTextArea(18, 40);
+        JScrollPane comandaScrollPane = new JScrollPane(comandaTextArea);
+        JLabel comandaLabel = new JLabel("Resumo da Comanda");
+
+        JButton fecharComandaButton = new JButton("Fechar Comanda");
+        JButton pagarComandaButton = new JButton("Pagar Comanda");
+
+        JButton okButton = new JButton("Ok");
+        JButton cancelButton = new JButton("Cancel");
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(clienteLabel, gbc);
+
+        gbc.gridx = 1;
+        panel.add(clienteComboBox, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        panel.add(comandaLabel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        panel.add(comandaScrollPane, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(fecharComandaButton, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(pagarComandaButton, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(15, 5, 5, 5);
+        panel.add(okButton, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panel.add(cancelButton, gbc);
+
+        fecharComandaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Fechar comanda
+                Cliente cliente = clienteController.consultar(Integer.parseInt((String) clienteComboBox.getSelectedItem()));
+                comandaTextArea.setText(comandaController.fecharComanda(cliente, pedidoController, mesaController));
+            }
+        });
+
+        pagarComandaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Lógica para pagar comanda
+            }
+        });
+
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose(); // Fecha a janela de diálogo ao clicar em "Ok"
+            }
+        });
+
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dialog.dispose(); // Fecha a janela de diálogo ao clicar em "Cancel"
+            }
+        });
+
+        dialog.add(panel);
+        dialog.setVisible(true);
     }
 
 }

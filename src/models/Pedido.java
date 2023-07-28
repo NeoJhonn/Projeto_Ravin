@@ -144,23 +144,23 @@ public class Pedido {
         this.clienteId = clienteId;
     }
 
+
     @Override
     public String toString() {
-        String nomeProduto = produto.getNome();
-        return "Pedido{" + "\n" +
-                "id=" + id + "\n" +
-                ", produto=" + nomeProduto + "\n" +
-                ", clienteId=" + clienteId + "\n" +
-                ", dataHoraSolicitacao=" + dataHoraSolicitacao + "\n" +
-                ", dataHoraInicioPreparo=" + dataHoraInicioPreparo + "\n" +
-                ", tempoPreparoRestante=" + tempoPreparoRestante + "\n" +
-                ", statusPreparo=" + statusPreparo + "\n" +
-                ", observacao='" + observacao + "\n" +
-                ", quantidade=" + quantidade + "\n" +
-                ", criadoEM=" + criadoEM + "\n" +
-                ", alteradoEM=" + alteradoEM + "\n" +
-                ", criadoPor='" + criadoPor + "\n" +
-                ", AlteradoPor='" + AlteradoPor + "\n" +
-                '}'+ "\n";
+        return "Pedido{" + "\n"+
+                "id=" + id + "\n"+
+                ", produto=" + produto.getNome() + "\n"+
+                ", clienteId=" + clienteId + "\n"+
+                ", dataHoraSolicitacao=" + dataHoraSolicitacao + "\n"+
+                ", dataHoraInicioPreparo=" + dataHoraInicioPreparo + "\n"+
+                ", tempoPreparoRestante=" + tempoPreparoRestante + "\n"+
+                ", statusPreparo=" + statusPreparo + "\n"+
+                ", observacao='" + observacao + "\n"+
+                ", quantidade=" + quantidade + "\n"+
+                ", criadoEM=" + criadoEM + "\n"+
+                ", alteradoEM=" + alteradoEM + "\n"+
+                ", criadoPor='" + criadoPor + "\n"+
+                ", AlteradoPor='" + AlteradoPor + "\n"+
+                '}' + "\n";
     }
 }

@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static views.CardapioView.*;
 import static views.ClienteView.*;
+import static views.ComandaView.*;
 import static views.FuncionarioView.*;
 import static views.MesaView.*;
 import static views.PedidoView.*;
@@ -526,16 +527,19 @@ public class MenuView extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Realizar pedido
-                    Pedido pedido = PedidoView.adicionarPedido(idDinamico, funcionarioController, clienteController, produtoController, mesaController, controller);
+                    Pedido pedido = adicionarPedido(idDinamico, funcionarioController, clienteController, produtoController, mesaController);
 
-
-                    if (pedido != null)
                     try {
+
                         controller.cadastrar(pedido);
-                        comandaController.cadastrar(ComandaView.adicionarComanda(idDinamico, mesaController, pedido, controller, clienteController, comandaController));
+
+                        Comanda comanda = adicionarComanda(idDinamico, mesaController, pedido, controller, clienteController, comandaController);
+                        comandaController.cadastrar(comanda);
 
                     } catch (Exception f) {
-                        JOptionPane.showMessageDialog(null, f.getMessage());
+                        JOptionPane.showMessageDialog(null, "Você deve cadastrar um pedido e uma comanda!");
+                        if (pedido != null)
+                        controller.excluir(pedido.getId());
                     }
                 }
             });
@@ -592,7 +596,8 @@ public class MenuView extends JFrame {
                     // Consultar Status do pedido
                     try {
                         int pedidoId = Integer.parseInt(mostrarMenuIdConsultarStatusPedido(controller.listarTodos()));
-                        mostrarStatusPedido(pedidoController.consultar(pedidoId), clienteController, comandaController, mesaController);
+                        Pedido pedido = pedidoController.consultar(pedidoId);
+                        mostrarStatusPedido(pedido, controller, clienteController, comandaController, mesaController);
                     } catch (Exception p) {
 
                     }
@@ -605,8 +610,7 @@ public class MenuView extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Listar Comandas Por Status
-
-
+                    listarComandasPorStatus(comandaController);
                 }
             });
 
@@ -614,7 +618,7 @@ public class MenuView extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Fechar Comanda
-
+                    fecharComandaCliente(comandaController, clienteController, controller, mesaController);
                 }
             });
         }

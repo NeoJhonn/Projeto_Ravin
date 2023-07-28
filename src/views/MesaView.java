@@ -395,7 +395,7 @@ public class MesaView {
         JComboBox<StatusMesa> comboBox = new JComboBox<>(status);
 
         // Crie a área de texto
-        JTextArea textArea = new JTextArea(10, 40);
+        JTextArea textArea = new JTextArea(10, 45);
         JScrollPane scrollPane = new JScrollPane(textArea);
 
         // Adicione elementos ao painel
