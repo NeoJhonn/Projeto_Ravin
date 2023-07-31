@@ -1,13 +1,14 @@
 package repositories;
 
 import builders.Builder;
+import interfaces.IRepositoryCRUD;
 import models.Funcionario;
 import models.Mesa;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MesaRepository {
+public class MesaRepository implements IRepositoryCRUD {
 
     private List<Mesa> mesas;
 
@@ -17,28 +18,32 @@ public class MesaRepository {
 
     }
 
-    public void salvar(Mesa entidade) {
-        Mesa mesa = (entidade != null) ? buscarPorId(entidade.getId()) : null;
+    @Override
+    public void salvar(Object entidade) {
+        Mesa mesa = (entidade != null) ? buscarPorId(((Mesa)entidade).getId()) : null;
 
         if(mesa == null) {
-            mesas.add(entidade);
+            mesas.add((Mesa) entidade);
         } else {
             // caso tenha uma mesa com o mesmo id da entidade passada como parâmetro
             // atribuir variável entidade em mesa para atualizar a referência
             // com as atualizações
-            mesa = entidade;
+            mesa = (Mesa) entidade;
         }
 
     }
 
+    @Override
     public List<Mesa> listarTodos() {
         return mesas;
     }
 
-    public void excluir(Mesa entidade) {
+    @Override
+    public void excluir(Object entidade) {
         mesas.remove(entidade);
     }
 
+    @Override
     public Mesa buscarPorId(int id) {
         Mesa mesaBuscada = null;
         for (Mesa mesa : mesas) {

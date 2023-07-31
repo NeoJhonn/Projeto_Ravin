@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Cliente extends Pessoa {
     private String observacoes;
+    private boolean temComandaFechada;
     private boolean vip;
 
     public Cliente() {
@@ -31,6 +32,14 @@ public class Cliente extends Pessoa {
 
     public void setVip(boolean vip) {
         this.vip = vip;
+    }
+
+    public boolean temComandaFechada() {
+        return temComandaFechada;
+    }
+
+    public void setComandaFechada(boolean temComandaFechada) {
+        this.temComandaFechada = temComandaFechada;
     }
 
     @Override

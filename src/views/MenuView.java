@@ -1,14 +1,19 @@
 package views;
 
 import controllers.*;
+import enums.StatusComanda;
+import jdk.jshell.execution.Util;
 import models.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static views.CardapioView.*;
 import static views.ClienteView.*;
@@ -29,9 +34,31 @@ public class MenuView extends JFrame {
         // Centraliza a janela na tela
         frame.setLocationRelativeTo(null);
 
-        JLabel label = new JLabel("Restaurante Ravin");
+
+        //Criar um label para setar a logo
+        JLabel label = new JLabel();
+        //carregando a logo como um recurso interno do projeto
+        Image image = null;
+        try {
+            InputStream inputStream =  MenuView.class.getResourceAsStream("/util/logo.png");
+            image = ImageIO.read(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Carregar a imagem do arquivo
+        ImageIcon imageIcon = new ImageIcon(image);
+
+        // Redimensionar a imagem para o tamanho desejado
+        image = imageIcon.getImage().getScaledInstance(300, 350, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(image);
+
+        // Configurar a imagem no JLabel
+        label.setIcon(resizedIcon);
+
         label.setHorizontalAlignment(SwingConstants.CENTER);
         frame.add(label, BorderLayout.CENTER);
+
 
         JToolBar toolbar = new JToolBar();
         toolbar.setFloatable(false);
@@ -403,6 +430,8 @@ public class MenuView extends JFrame {
             popupMenu.add(item6);
             popupMenu.add(item7);
             popupMenu.add(item8);
+
+
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -505,6 +534,7 @@ public class MenuView extends JFrame {
             JMenuItem item6 = new JMenuItem("Consultar Status do pedido");
             JMenuItem item7 = new JMenuItem("Listar Comandas Por Status");
             JMenuItem item8 = new JMenuItem("Fechar Comanda");
+            JMenuItem item9 = new JMenuItem("Abrir Comandas dos Clientes");
             popupMenu.add(item1);
             popupMenu.add(item2);
             popupMenu.add(item3);
@@ -513,6 +543,7 @@ public class MenuView extends JFrame {
             popupMenu.add(item6);
             popupMenu.add(item7);
             popupMenu.add(item8);
+            popupMenu.add(item9);
 
             button.addActionListener(new ActionListener() {
                 @Override
@@ -619,6 +650,23 @@ public class MenuView extends JFrame {
                 public void actionPerformed(ActionEvent e) {
                     // Fechar Comanda
                     fecharComandaCliente(comandaController, clienteController, controller, mesaController);
+                }
+            });
+
+            item9.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    if (clienteController.listarTodos().size() != 0 && comandaController.listarTodos().size() != 0)
+                        // Permirtir que os clientes com comanda fechadas façam pedidos novamente
+                        clienteController.listarTodos().stream().forEach(cliente -> {
+                            cliente.setComandaFechada(false);
+                        });
+
+                    comandaController.listarTodos().stream().forEach(comanda -> {
+                        comanda.setStatusComanda(StatusComanda.Em_Aberto);
+                    });
+
+                    JOptionPane.showMessageDialog(null, "Clientes com Comanda fechada podem fazer pedido novamente!");
                 }
             });
         }

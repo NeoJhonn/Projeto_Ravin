@@ -1,12 +1,13 @@
 package repositories;
 
+import interfaces.IRepositoryCRUD;
 import models.Comanda;
 import models.Pedido;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComandaRepository {
+public class ComandaRepository implements IRepositoryCRUD {
 
     private List<Comanda> comandas;
 
@@ -17,29 +18,33 @@ public class ComandaRepository {
         comandas = new ArrayList<Comanda>();
     }
 
-    public void salvar(Comanda entidade) {
-        Comanda comanda = (entidade != null) ? buscarPorId(entidade.getId()) : null;
+    @Override
+    public void salvar(Object entidade) {
+        Comanda comanda = (entidade != null) ? buscarPorId(((Comanda) entidade).getId()) : null;
 
         if(comanda == null) {
-            comandas.add(entidade);
+            comandas.add((Comanda)entidade);
         } else {
-            // caso tenha um funcionário com o mesmo id da entidade passada como parâmetro
-            // atribuir variável entidade em funcionário para atualizar a referência
+            // caso tenha um comanda com o mesmo id da entidade passada como parâmetro
+            // atribuir variável entidade em comanda para atualizar a referência
             // com as atualizações
-            comanda = entidade;
+            comanda = (Comanda) entidade;
         }
 
     }
 
+    @Override
     public List<Comanda> listarTodos() {
         return comandas;
     }
 
 
-    public void excluir(Comanda entidade) {
+    @Override
+    public void excluir(Object entidade) {
         comandas.remove(entidade);
     }
 
+    @Override
     public Comanda buscarPorId(int id) {
         Comanda comandaBuscada = null;
         for (Comanda comanda : comandas) {

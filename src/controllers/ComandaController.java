@@ -55,11 +55,10 @@ public class ComandaController {
         return comandasPorStatus;
     }
 
-    public String fecharComanda(Cliente cliente, PedidoController pedidoController, MesaController mesaController) {
+    public String fecharComanda(Cliente cliente, PedidoController pedidoController, MesaController mesaController, ComandaController comandaController) {
         Comanda comanda = listarTodos().stream().filter(c -> c.getClienteId() == cliente.getId()).findFirst().orElse(null);
         Mesa mesa = mesaController.consultar(comanda.getMesaId());
 
-        int quantidade = 1;
 
         StringBuilder builder = new StringBuilder();
         builder.append(" ==================== Ravin Restaurante LTDA ==================== "+"\n");
@@ -67,32 +66,23 @@ public class ComandaController {
         builder.append("Cliente: "+cliente.getNome()+" - Mesa: "+ mesa.getNome() + " - Comanda: " + comanda.getCodigo() +"\n");
         builder.append(" ======================= Items Consumidos ======================="+"\n");
 
+        for (Pedido pedido: pedidoController.listarTodos()) {
 
-
-            for (Pedido pedido: pedidoController.listarTodos()) {
-                if (builder.toString().contains(pedido.getProduto().getNome())) {
-                    quantidade++;
-                }
-                if (comanda.getClienteId() == pedido.getClienteId()) {
-                    builder.append("QTD: "+ pedido.getQuantidade()+ " - Item: " + pedido.getProduto().getNome() +" --->  Valor Unitário: R$ " + pedido.getProduto().getPrecoVenda() +"\n");
-                }
-
-
+            if (comanda.getClienteId() == pedido.getClienteId()) {
+                builder.append("QTD: "+ pedido.getQuantidade()+ " - Item: " + pedido.getProduto().getNome() +" --->  Valor Unitário: R$ " + pedido.getProduto().getPrecoVenda() +"\n");
             }
+        }
 
         builder.append(" ================================================================" + "\n");
         builder.append("Total(R$): " + pedidoController.somarPedidosCliente(cliente) + "0");
 
+        // Alterar o estatus da comanda para fechada
+        comanda.setStatusComanda(StatusComanda.Fechada);
+
+
 
         return builder.toString();
     }
-
-    public String pagarComanda() {
-
-
-        return "";
-    }
-
 
 
 }

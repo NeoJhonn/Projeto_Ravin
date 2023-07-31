@@ -1,13 +1,14 @@
 package repositories;
 
 import builders.Builder;
+import interfaces.IRepositoryCRUD;
 import models.Cliente;
 import models.Funcionario;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClienteRepository {
+public class ClienteRepository implements IRepositoryCRUD {
 
     private List<Cliente> clientes;
 
@@ -16,28 +17,32 @@ public class ClienteRepository {
         clientes = new ArrayList<Cliente>();
     }
 
-    public void salvar(Cliente entidade) {
-        Cliente cliente = (entidade != null) ? buscarPorId(entidade.getId()) : null;
+    @Override
+    public void salvar(Object entidade) {
+        Cliente cliente = (entidade != null) ? buscarPorId(((Cliente) entidade).getId()) : null;
 
         if(cliente == null) {
-            clientes.add(entidade);
+            clientes.add((Cliente) entidade);
         } else {
-            // caso tenha um funcionário com o mesmo id da entidade passada como parâmetro
-            // atribuir variável entidade em funcionário para atualizar a referência
+            // caso tenha um cliente com o mesmo id da entidade passada como parâmetro
+            // atribuir variável entidade em cliente para atualizar a referência
             // com as atualizações
-            cliente = entidade;
+            cliente = (Cliente) entidade;
         }
 
     }
 
+    @Override
     public List<Cliente> listarTodos() {
         return clientes;
     }
 
-    public void excluir(Cliente entidade) {
+    @Override
+    public void excluir(Object entidade) {
         clientes.remove(entidade);
     }
 
+    @Override
     public Cliente buscarPorId(int id) {
         Cliente clienteBuscado = null;
         for (Cliente cliente : clientes) {

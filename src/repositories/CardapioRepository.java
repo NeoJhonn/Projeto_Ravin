@@ -6,7 +6,7 @@ import models.Cardapio;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CardapioRepository {
+public class CardapioRepository implements IRepositoryCRUD {
     private List<Cardapio> cardapios;
 
 
@@ -15,29 +15,32 @@ public class CardapioRepository {
         cardapios = new ArrayList<Cardapio>();
     }
 
-
-    public void salvar(Cardapio entidade) {
-        Cardapio cardapio = (entidade != null) ? buscarPorId(entidade.getId()) : null;
+    @Override
+    public void salvar(Object entidade) {
+        Cardapio cardapio = ((Cardapio) entidade != null) ? buscarPorId(((Cardapio)entidade).getId()) : null;
 
         if(cardapio == null) {
-            cardapios.add(entidade);
+            cardapios.add((Cardapio) entidade);
         } else {
-            // caso tenha um funcionário com o mesmo id da entidade passada como parâmetro
-            // atribuir variável entidade em funcionário para atualizar a referência
+            // caso tenha um cardapio com o mesmo id da entidade passada como parâmetro
+            // atribuir variável entidade em cardapio para atualizar a referência
             // com as atualizações
-            cardapio = entidade;
+            cardapio = (Cardapio) entidade;
         }
 
     }
 
+    @Override
     public List<Cardapio> listarTodos() {
         return cardapios;
     }
 
-    public void excluir(Cardapio entidade) {
+    @Override
+    public void excluir(Object entidade) {
         cardapios.remove(entidade);
     }
 
+    @Override
     public Cardapio buscarPorId(int id) {
         Cardapio cardapioBuscado = null;
         for (Cardapio cardapio : cardapios) {

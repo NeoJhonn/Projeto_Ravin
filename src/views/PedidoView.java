@@ -30,11 +30,13 @@ public class PedidoView {
 
             // Create labels and components for each input field
             JLabel label1 = new JLabel("Selecione o Cliente:");
-            String[] clientes = new String[clienteController.listarTodos().size()];
-            for (int i=0; i < clientes.length; i++) {
-                clientes[i] = clienteController.listarTodos().get(i).getNome();
+
+            JComboBox<String> comboBox1 = new JComboBox<>();
+            List<Cliente> clientesSemComanda = clienteController.listarTodos().stream().filter(c -> c.temComandaFechada() == false).toList();
+            for (int i=0; i < clientesSemComanda.size(); i++) {
+                comboBox1.addItem(clientesSemComanda.get(i).getNome());
             }
-            JComboBox<String> comboBox1 = new JComboBox<>(clientes);
+
 
             JLabel label2 = new JLabel("Produto:");
             JComboBox<String> comboBox2 = new JComboBox<>();
@@ -46,6 +48,8 @@ public class PedidoView {
             }
             Produto produtoSelecionado = produtoController.listarTodos().stream().filter(p -> p.getNome() == comboBox2.getSelectedItem()).findFirst().orElse(null);
             tempoPreparoField.setText(produtoSelecionado.getTempoPreparo());
+
+
             comboBox2.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -152,7 +156,7 @@ public class PedidoView {
             }
             JComboBox<String> comboBox2 = new JComboBox<>(produtos);
 
-            JLabel label5 = new JLabel("Tempo de Preparo Restante:");
+            JLabel label5 = new JLabel("Tempo de Preparo(em minutos):");
             JTextField textField5 = new JTextField(10);
 
             JLabel label6 = new JLabel("Status de Preparo:");
@@ -182,7 +186,8 @@ public class PedidoView {
 
             // Settar valores
             comboBox2.setSelectedItem(pedidoAlterar.getProduto().getNome());
-            textField5.setText(String.valueOf(pedidoAlterar.getTempoPreparoRestante()));
+            textField5.setText(String.valueOf(pedidoAlterar.getProduto().getTempoPreparo()));
+            textField5.setEditable(false);// não permitir a edição do campo
             comboBox3.setSelectedItem(pedidoAlterar.getStatusPreparo());
             textField7.setText(pedidoAlterar.getObservacao());
             textField8.setText(String.valueOf(pedidoAlterar.getQuantidade()));

@@ -11,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
@@ -169,6 +171,7 @@ public class ComandaView {
     }
 
     public static void fecharComandaCliente(ComandaController comandaController, ClienteController clienteController, PedidoController pedidoController, MesaController mesaController) {
+
         JFrame frame = new JFrame("Exemplo de InputDialog");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 500);
@@ -237,19 +240,58 @@ public class ComandaView {
         gbc.anchor = GridBagConstraints.CENTER;
         panel.add(cancelButton, gbc);
 
+        // Adicionar evento de clique ao botão fechar comanda
         fecharComandaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Fechar comanda
-                Cliente cliente = clienteController.consultar(Integer.parseInt((String) clienteComboBox.getSelectedItem()));
-                comandaTextArea.setText(comandaController.fecharComanda(cliente, pedidoController, mesaController));
+                try {
+                    Cliente cliente = clienteController.consultar(Integer.parseInt((String) clienteComboBox.getSelectedItem()));
+                    Comanda comanda = comandaController.listarTodos().stream().filter(c -> c.getClienteId() == cliente.getId()).findFirst().orElse(null);
+
+                    if (comanda.getStatusComanda() == StatusComanda.Em_Aberto) {
+                        comandaTextArea.setText(comandaController.fecharComanda(cliente, pedidoController, mesaController, comandaController));
+                        // Settar que o cliente tem comanda fechada
+                        cliente.setComandaFechada(true);
+                        //clienteController.cadastrar(cliente);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "A comanda para esse cliente já foi fechada ou paga!");
+
+                    }
+
+                } catch (Exception c) {
+                    JOptionPane.showMessageDialog(null, "Não há clientes com comanda a serem fechadas");
+                }
             }
         });
 
+        // Adicionar evento de clique ao botão pagar comanda
         pagarComandaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Lógica para pagar comanda
+                // Pagar comanda
+
+                try {
+
+                    Cliente cliente = clienteController.consultar(Integer.parseInt((String) clienteComboBox.getSelectedItem()));
+                    Comanda comanda = comandaController.listarTodos().stream().filter(c -> c.getClienteId() == cliente.getId()).findFirst().orElse(null);
+
+                    if (comanda.getStatusComanda() == StatusComanda.Fechada ) {
+                        pagamentoDialog(cliente.getId(), clienteController, pedidoController, comandaTextArea);
+                        // Mudar o status da comanda para paga
+                        comanda.setStatusComanda(StatusComanda.Paga);
+                    } else {
+                        if (comanda.getStatusComanda() == StatusComanda.Paga ) {
+                            JOptionPane.showMessageDialog(null, "Essa comanda já foi paga!");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Feche uma comanda antes de pagar!");
+                        }
+                    }
+
+
+                } catch (Exception c){
+                    JOptionPane.showMessageDialog(null, "Não há clientes com comanda a serem pagas!");
+                }
             }
         });
 
@@ -269,6 +311,98 @@ public class ComandaView {
 
         dialog.add(panel);
         dialog.setVisible(true);
+    }
+
+    public static void pagamentoDialog(int clienteId, ClienteController clienteController, PedidoController pedidoController, JTextArea comandaTextArea) {
+        // Somar todos os pedidos do CLiente
+        double totalComanda = pedidoController.somarPedidosCliente(clienteController.consultar(clienteId));
+
+        // Criação dos componentes
+        JLabel label = new JLabel("Escolha a Opção de Pagamento:");
+        JComboBox<String> comboBox = new JComboBox<>();
+        comboBox.addItem("Dinheiro");
+        comboBox.addItem("Cartão");
+        JTextField valorField = new JTextField(2);
+        JButton pagarComandaButton = new JButton("Pagar Comanda");
+
+
+        // Espaço entre o JComboBox e o JTextField
+        JPanel spacePanel = new JPanel();
+        spacePanel.setPreferredSize(new Dimension(2, 10));
+        JPanel spacePanel2 = new JPanel();
+        spacePanel2.setPreferredSize(new Dimension(2, 10));
+
+        // Painel para agrupar os componentes
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.add(label);
+        panel.add(comboBox);
+        panel.add(spacePanel);
+        valorField.setText(String.valueOf(totalComanda));
+        panel.add(valorField);
+        panel.add(spacePanel2);
+        panel.add(pagarComandaButton);
+
+        // Adicionar evento de clique ao combox
+        comboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if (comboBox.getSelectedItem() == "Cartão") {
+                    valorField.setText(String.valueOf(totalComanda));
+                    valorField.setEditable(false);
+
+                } else {
+                    valorField.setEditable(true);
+                }
+
+            }
+        });
+
+        // Adicionar evento de clique no botão pagarComanda
+        pagarComandaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Double.parseDouble(valorField.getText());
+
+                    if (Double.parseDouble(valorField.getText()) >= totalComanda) {
+                        double troco = Double.parseDouble(valorField.getText()) - totalComanda;
+
+                        StringBuilder builder = new StringBuilder();
+                        builder.append(comandaTextArea.getText() + "\n" +
+                            "Forma de Pagamento: " + comboBox.getSelectedItem() + "\n" +
+                            "Troco (R$): " + troco + "\n" +
+                            "Comanda Paga com sucesso!"
+                        );
+
+                        comandaTextArea.setText(builder.toString());
+
+                        JOptionPane.showMessageDialog(null, "Comanda Paga com sucesso!");
+                        // Fechar a dialog depois de pagar
+                        JOptionPane.getRootFrame().dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Digite um valor maior ou igual ao total da Comanda!");
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Digite um valor válido(somente números)!");
+                }
+            }
+        });
+
+
+
+        // Exibir o JOptionPane
+        JOptionPane.showOptionDialog(
+                null,
+                panel,
+                "Opção de Pagamento",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                new Object[]{},
+                null
+        );
     }
 
 }

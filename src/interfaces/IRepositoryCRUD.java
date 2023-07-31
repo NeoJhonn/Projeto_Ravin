@@ -8,7 +8,7 @@ import java.util.List;
 public interface IRepositoryCRUD {
     void salvar(Object entidade);
 
-    List<Object> listarTodos();
+    List<?> listarTodos();
 
     void excluir(Object entidade);
 
