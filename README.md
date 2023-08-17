@@ -18,7 +18,7 @@ Aplicação Desktop que desenvolvi para disciplina de Programação Orientada a 
 <h3 align="center"> Diagrama de Classes </h3>
 <p align="center">
    <img alt="Diagrama de Classes" src=".github/Diagrama%20de%20classes.png" 
-  width="70%">
+  width="80%">
 </p>
 
 <p align="center">
@@ -35,7 +35,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 ## 💻 Projeto
 
 O Desktop Ravin é uma aplicação para gerenciar um restaurante e conta com as seguintes features:
-- Cadastro de Clientes, funcionários, protudos, cardápios e mesas.
+- Cadastro de Clientes, funcionários, produtos, cardápios e mesas.
 - Reserva de mesa para um cliente.
 - Gerenciamento de pedidos e fechamento de comanda.
 
