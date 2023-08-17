@@ -18,7 +18,7 @@ Aplicação Desktop que desenvolvi para disciplina de Programação Orientada a 
 <h3 align="center"> Diagrama de Classes </h3>
 <p align="center">
    <img alt="Diagrama de Classes" src=".github/Diagrama%20de%20classes.png" 
-  width="60%">
+  width="70%">
 </p>
 
 <p align="center">
