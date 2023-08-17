@@ -44,6 +44,8 @@ O Desktop Ravin é uma aplicação para gerenciar um restaurante e conta com as 
 
 Esse projeto está sob a licença MIT.
 
-# Binário: https://github.com/NeoJhonn/ravin-desktop/blob/main/Binary/Projeto_Ravin.jar.
+<p>
+  Binário: https://github.com/NeoJhonn/ravin-desktop/blob/main/Binary/Projeto_Ravin.jar.
+</p>
 ---
 
