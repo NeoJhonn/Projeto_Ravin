@@ -22,8 +22,8 @@ Aplicação Desktop que desenvolvi para disciplina de Programação Orientada a 
 </p>
 
 <p align="center">
-   <img alt="Desktop Ravin" src=""
-  width="70%">
+   <img alt="Desktop Ravin" src="https://github.com/NeoJhonn/ravin-desktop/blob/main/.github/screenshot.png"
+  width="80%">
 </p>
 
 ## 🚀 Tecnologias
