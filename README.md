@@ -22,7 +22,7 @@ Aplicação Desktop que desenvolvi para disciplina de Programação Orientada a 
 </p>
 
 <p align="center">
-   <img alt="movie-list-mvc" src=""
+   <img alt="Desktop Ravin" src=""
   width="70%">
 </p>
 
